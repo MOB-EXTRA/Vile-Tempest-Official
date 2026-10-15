@@ -1,112 +1,111 @@
 /* ==========================================================================
-   Clickable Playlist Ad Banner
+   Clickable Playlist Ad Card Wrapper
    ========================================================================== */
-.playlist-ad-card {
-  display: flex;
-  flex-direction: column;
+.playlist-ad-anchor {
+  display: block;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  transition: transform var(--transition-fast);
+}
+
+.playlist-ad-anchor:hover {
+  transform: translateY(-4px);
+}
+
+.playlist-embed-card {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  text-decoration: none;
+  box-shadow: var(--shadow-md);
   transition:
-    transform var(--transition-fast),
     border-color var(--transition-fast),
     box-shadow var(--transition-fast);
-  box-shadow: var(--shadow-md);
 }
 
-.playlist-ad-card:hover {
-  transform: translateY(-4px);
+.playlist-ad-anchor:hover .playlist-embed-card {
   border-color: var(--accent-primary);
   box-shadow: var(--shadow-lg);
 }
 
-.ad-thumbnail-wrapper {
+/* 16:9 Responsive Video Player Container */
+.playlist-iframe-wrapper {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background-color: var(--bg-subtle);
+  background-color: #000;
 }
 
-.ad-thumbnail-wrapper img {
+/* Transparent shield layer over the iframe so clicking anywhere redirects to YT */
+.iframe-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: transparent;
+  cursor: pointer;
+}
+
+.playlist-iframe-wrapper iframe {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform var(--transition-normal);
+  border: 0;
+  display: block;
+  position: relative;
+  z-index: 1;
 }
 
-.playlist-ad-card:hover .ad-thumbnail-wrapper img {
-  transform: scale(1.03);
-}
-
-.ad-play-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 56px;
-  height: 56px;
-  background-color: rgba(11, 15, 23, 0.85);
-  border: 1px solid var(--border-strong);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent-primary);
-  font-size: 20px;
-  backdrop-filter: blur(4px);
-  transition: all var(--transition-fast);
-}
-
-.playlist-ad-card:hover .ad-play-button {
-  background-color: var(--accent-primary);
-  color: var(--bg-main);
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-.ad-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  padding: 4px 10px;
-  background-color: rgba(11, 15, 23, 0.8);
-  color: var(--accent-primary);
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(4px);
-}
-
-.ad-content {
-  padding: 16px 20px;
+/* Metadata Bar below player */
+.playlist-meta {
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px;
+  background-color: var(--bg-surface);
 }
 
-.ad-title {
+.playlist-title {
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.4;
-  margin: 0;
+  margin: 0 0 4px 0;
 }
 
-.ad-subtitle {
+.playlist-desc {
   font-size: 13px;
   color: var(--text-secondary);
+  line-height: 1.5;
   margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
-.ad-subtitle i {
-  font-size: 11px;
+/* Direct YouTube Redirect Button style */
+.playlist-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: var(--bg-subtle);
   color: var(--accent-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  align-self: flex-start;
+  transition: all var(--transition-fast);
+}
+
+.playlist-ad-anchor:hover .playlist-link-btn {
+  background-color: var(--accent-primary);
+  color: var(--bg-main);
+  border-color: var(--accent-primary);
+}
+
+/* Desktop layout adjustment */
+@media (min-width: 768px) {
+  .playlist-meta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 }

@@ -20,9 +20,16 @@
   <body>
     <header class="site-header">
       <div class="header-container">
-        <div class="site-name">
-          <span class="brand-accent">Vile Tempest</span> Official
-        </div>
+        <a
+          href="https://www.youtube.com/channel/UCbDtYZS08VvB6luAcyn08bQ"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="site-name-link"
+        >
+          <div class="site-name">
+            <span class="brand-accent">Vile Tempest</span> Official
+          </div>
+        </a>
         <div class="header-actions">
           <button class="icon-btn" aria-label="Search">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -37,13 +44,13 @@
     </header>
 
     <main class="main-content">
+      <!-- Welcome Hero Section -->
       <section class="welcome-hero">
         <div class="hero-content">
-          <span class="hero-badge"
-            ><img src="assets/img/MOB-EXTRA.png" alt="" srcset="" /> MOB
-            EXTRA</span
-          >
-          <h1 class="hero-title">Custom Gaming Utilities & Web Tools.</h1>
+          <span class="hero-badge">
+            <img src="assets/img/MOB-EXTRA.png" alt="" /> MOB EXTRA
+          </span>
+          <h1 class="hero-title">Custom Gaming Utilities & Web Tools</h1>
           <p class="hero-description">
             Fast, lightweight, client-side web tools tailored for mobile gamers
             and content creators. Built for reliability and smooth performance.
@@ -68,33 +75,131 @@
         </div>
       </section>
 
+      <!-- First YouTube Playlist Ad -->
       <section class="videos-section">
         <a
           href="https://www.youtube.com/playlist?list=PLADVQemxnxcksBFMcPoxp7epwiCASser8"
           target="_blank"
           rel="noopener noreferrer"
-          class="playlist-ad-card"
+          class="playlist-ad-anchor"
         >
-          <div class="ad-thumbnail-wrapper">
-            <img
-              src="https://img.youtube.com/vi/aCg3m2_8Cno/maxresdefault.jpg"
-              alt="Vile Tempest Playlist"
-              loading="lazy"
-            />
-            <div class="ad-play-button">
-              <i class="fa-solid fa-play"></i>
+          <div class="playlist-embed-card">
+            <div class="playlist-iframe-wrapper">
+              <div class="iframe-shield"></div>
+              <iframe
+                src="https://www.youtube.com/embed/videoseries?list=PLADVQemxnxcksBFMcPoxp7epwiCASser8"
+                title="CODM Tutorials, Tips, Updates & Events | Vile Tempest Official"
+                allow="
+                  accelerometer;
+                  autoplay;
+                  clipboard-write;
+                  encrypted-media;
+                  gyroscope;
+                  picture-in-picture;
+                "
+                allowfullscreen
+              >
+              </iframe>
             </div>
-            <span class="ad-badge">Playlist</span>
+
+            <div class="playlist-meta">
+              <div class="playlist-info">
+                <h3 class="playlist-title">
+                  CODM Tutorials, Tips, Updates & Events | Call of Duty: Mobile
+                </h3>
+                <p class="playlist-desc">
+                  Guides for beginners and advanced players, including how-tos
+                  and ranking tips.
+                </p>
+              </div>
+              <span class="playlist-link-btn">
+                <span>Watch on YouTube</span>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </span>
+            </div>
           </div>
-          <div class="ad-content">
-            <h3 class="ad-title">
-              CODM Tutorials, Tips, Updates & Events | Call of Duty: Mobile
-            </h3>
-            <p class="ad-subtitle">
-              Guides for beginners and advanced players, including how-tos and
-              ranking tips.
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </section>
+
+      <!-- ==========================================================================
+       UTILITIES SECTION (Inserted between YouTube Ads)
+       ========================================================================== -->
+      <section id="utilities" class="utilities-section">
+        <div class="utility-card">
+          <div class="utility-header">
+            <div class="utility-icon">
+              <i class="fa-solid fa-download"></i>
+            </div>
+            <span class="utility-status-pill">LIVE UPDATES</span>
+          </div>
+
+          <div class="utility-body">
+            <h3 class="utility-title">CODM Public Test Server Links</h3>
+            <p class="utility-description">
+              Get quick access to compiled official Call of Duty: Mobile Public
+              Test Build download links (Android APKs & iOS TestFlight) as they
+              are released.
             </p>
+
+            <div class="utility-tags">
+              <span class="tag">Test Server</span>
+              <span class="tag">APK Downloads</span>
+              <span class="tag">iOS / Android</span>
+            </div>
+          </div>
+
+          <div class="utility-actions">
+            <a href="#ptb-download" class="btn-utility-primary">
+              <span>Get PTB Links</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+            <button class="btn-utility-share" aria-label="Share Utility">
+              <i class="fa-solid fa-share-nodes"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Second YouTube Playlist Ad -->
+      <section class="videos-section">
+        <a
+          href="https://www.youtube.com/playlist?list=PLADVQemxnxcksBFMcPoxp7epwiCASser8"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="playlist-ad-anchor"
+        >
+          <div class="playlist-embed-card">
+            <div class="playlist-iframe-wrapper">
+              <div class="iframe-shield"></div>
+              <iframe
+                src="https://www.youtube.com/embed/videoseries?list=PLADVQemxnxckuSsd2zSSv5sIyXzjzbWo9"
+                title="CODM Tutorials, Tips, Updates & Events | Vile Tempest Official"
+                allow="
+                  accelerometer;
+                  autoplay;
+                  clipboard-write;
+                  encrypted-media;
+                  gyroscope;
+                  picture-in-picture;
+                "
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+
+            <div class="playlist-meta">
+              <div class="playlist-info">
+                <h3 class="playlist-title">Latest CODM Garena Redeem Codes</h3>
+                <p class="playlist-desc">
+                  Get the newest active redemption codes, limited-time event
+                  freebies, and exclusive Garena bundle drops.
+                </p>
+              </div>
+              <span class="playlist-link-btn">
+                <span>Get codes now</span>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </span>
+            </div>
           </div>
         </a>
       </section>

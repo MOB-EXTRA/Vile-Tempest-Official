@@ -24,6 +24,15 @@
     justify-content: space-between;
   }
 
+  .site-name-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .site-name-link:hover .site-name {
+    opacity: 0.9;
+  }
+
   /* Site Name / Brand Typography */
   .site-name {
     font-size: 18px;
