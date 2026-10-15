@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Main Content Layout Container
+   1. MAIN CONTENT LAYOUT CONTAINER
    ========================================================================== */
 .main-content {
   max-width: 1200px;
@@ -7,8 +7,13 @@
   padding: 40px 24px;
 }
 
+/* Global Filter Utility Class */
+.hidden-content {
+  display: none !important;
+}
+
 /* ==========================================================================
-   Welcome Hero Section Styles
+   2. WELCOME HERO SECTION STYLES
    ========================================================================== */
 .welcome-hero {
   display: flex;
@@ -120,7 +125,7 @@
 }
 
 /* ==========================================================================
-   Modular Utility Card Component (PTB Links & Future Utilities)
+   3. MODULAR UTILITY CARD COMPONENT (PTB Links, Tools, Codes)
    ========================================================================== */
 .utilities-section {
   margin: 32px 0;
@@ -270,7 +275,81 @@
 }
 
 /* ==========================================================================
-   Responsive Breakpoints
+   4. FIXED / STICKY TOP SEARCH BAR STYLES
+   ========================================================================== */
+.sticky-search-bar-wrapper {
+  position: sticky;
+  top: 70px; /* Matches your header height */
+  z-index: 999;
+  background-color: rgba(11, 15, 23, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 14px 24px;
+  width: 100%;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-fast);
+}
+
+.search-bar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--bg-surface);
+  border: 1.5px solid var(--accent-primary);
+  border-radius: var(--radius-full);
+  padding: 10px 20px;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+}
+
+.search-input-wrapper i {
+  color: var(--accent-primary);
+  font-size: 16px;
+}
+
+.search-input-wrapper input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 500;
+  font-family: var(--font-body);
+}
+
+.search-input-wrapper input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: var(--text-secondary);
+  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.search-close-btn:hover {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   5. RESPONSIVE BREAKPOINTS
    ========================================================================== */
 @media (min-width: 768px) {
   .welcome-hero {
