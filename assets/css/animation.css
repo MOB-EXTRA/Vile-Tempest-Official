@@ -1,0 +1,33 @@
+/* ==========================================================================
+   Hero Image Subtle Floating & Gentle Breathing Animation
+   ========================================================================== */
+
+@keyframes floatAndStretch {
+  0% {
+    transform: translateY(0px) translateX(0px) scale(1, 1);
+  }
+  25% {
+    transform: translateY(-8px) translateX(3px) scale(0.995, 1.005);
+  }
+  50% {
+    transform: translateY(-14px) translateX(-2px) scale(1.005, 0.995);
+  }
+  75% {
+    transform: translateY(-6px) translateX(2px) scale(0.998, 1.002);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) scale(1, 1);
+  }
+}
+
+.hero-img {
+  will-change: transform;
+  /* Increased duration to 6s for a smoother, more elegant glide */
+  animation: floatAndStretch 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-img {
+    animation: none;
+  }
+}
