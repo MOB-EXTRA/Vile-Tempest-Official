@@ -44,10 +44,11 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(() => searchInput.focus(), 50);
   }
 
-  function closeSearch() {
+  // Closes search bar AND fully resets page results back to original state
+  function closeAndResetSearch() {
     searchBarContainer.classList.add("hidden-content");
     searchInput.value = "";
-    noResultsElem.classList.add("hidden-content");
+    searchInput.blur();
     applyCurrentViewFilter();
   }
 
@@ -79,14 +80,26 @@ document.addEventListener("DOMContentLoaded", function () {
     if (searchBarContainer.classList.contains("hidden-content")) {
       openSearch();
     } else {
-      closeSearch();
+      closeAndResetSearch();
     }
   });
 
-  closeSearchBtn.addEventListener("click", closeSearch);
+  // Clicking the '×' close button now fully resets the page to original view
+  closeSearchBtn.addEventListener("click", function () {
+    closeAndResetSearch();
+  });
+
+  // Hit Enter: closes search bar, dismisses keyboard, but keeps filtered results (per your preference)
+  searchInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      searchBarContainer.classList.add("hidden-content");
+      searchInput.blur();
+    }
+  });
 
   // ==========================================
-  // SMART KEYWORD RANKING & NO-RESULTS ENGINE
+  // SMART KEYWORD RANKING, SCROLL & NO-RESULTS
   // ==========================================
   searchInput.addEventListener("input", function (e) {
     const rawQuery = e.target.value.toLowerCase().trim();
@@ -144,12 +157,17 @@ document.addEventListener("DOMContentLoaded", function () {
     scoredCards.sort((a, b) => b.score - a.score);
 
     let activeMatches = 0;
+    let firstMatchedCard = null;
+
     scoredCards.forEach((item) => {
       if (item.matchedCount > 0) {
         activeMatches++;
         item.card.classList.remove("hidden-content");
         if (mainContent) {
-          mainContent.insertBefore(item.card, noResultsElem); // Keep cards above the no-results message
+          mainContent.insertBefore(item.card, noResultsElem);
+        }
+        if (!firstMatchedCard) {
+          firstMatchedCard = item.card;
         }
       } else {
         item.card.classList.add("hidden-content");
@@ -161,6 +179,19 @@ document.addEventListener("DOMContentLoaded", function () {
       noResultsElem.classList.remove("hidden-content");
     } else {
       noResultsElem.classList.add("hidden-content");
+
+      // Auto-scroll smoothly to the top matching result card
+      if (firstMatchedCard) {
+        const headerOffset = 130;
+        const elementPosition = firstMatchedCard.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
     }
   });
 
