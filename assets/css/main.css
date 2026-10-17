@@ -351,6 +351,11 @@
 /* ==========================================================================
    5. COMMUNITY FEED CARDS (REDDIT & X / TWITTER)
    ========================================================================== */
+.community-section {
+  margin: 32px 0;
+  width: 100%;
+}
+
 .reddit-icon {
   background-color: rgba(255, 69, 0, 0.12) !important;
   color: #ff4500 !important;
