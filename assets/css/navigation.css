@@ -1,0 +1,169 @@
+/* ==========================================================================
+   Professional Sticky Header Styles
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 70px; /* Easy adjustment for header height */
+  background-color: rgba(19, 26, 38, 0.85); /* Semi-transparent surface color */
+  backdrop-filter: blur(12px); /* Modern frosted-glass effect */
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-normal);
+
+  .header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .site-name-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .site-name-link:hover .site-name {
+    opacity: 0.9;
+  }
+
+  /* Site Name / Brand Typography */
+  .site-name {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .brand-accent {
+    color: var(--accent-primary);
+  }
+
+  /* Action Icons Container */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Action Icon Buttons */
+  .icon-btn {
+    position: relative;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .icon-btn:hover {
+    background-color: var(--bg-subtle);
+    color: var(--text-primary);
+    border-color: var(--border-subtle);
+  }
+
+  .icon-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* Optional Notification Dot Badge */
+  .badge-dot {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 7px;
+    height: 7px;
+    background-color: var(--accent-primary);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--bg-surface);
+  }
+}
+
+/* ==========================================================================
+   Professional Fixed Bottom Navigation Styles
+   ========================================================================== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 64px; /* Easy adjustment for bottom nav height */
+  background-color: rgba(19, 26, 38, 0.85); /* Matching frosted-glass surface */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border-subtle);
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.3);
+
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around; /* Distributes items evenly */
+  }
+
+  /* Bottom Navigation Item */
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 500;
+    height: 100%;
+    flex: 1;
+    transition: all var(--transition-fast);
+
+    i {
+      font-size: 18px;
+      transition: transform var(--transition-fast);
+    }
+
+    span {
+      letter-spacing: -0.1px;
+    }
+  }
+
+  /* Hover State */
+  .nav-item:hover {
+    color: var(--text-primary);
+    background-color: rgba(32, 43, 60, 0.4);
+  }
+
+  /* Active State (e.g., current page) */
+  .nav-item.active {
+    color: var(--accent-primary);
+    font-weight: 600;
+
+    i {
+      transform: translateY(-2px); /* Slight lift effect for active tab */
+    }
+  }
+}
+
+/* Add bottom padding to body so content isn't hidden behind the fixed bottom nav */
+body {
+  padding-bottom: 64px;
+}
