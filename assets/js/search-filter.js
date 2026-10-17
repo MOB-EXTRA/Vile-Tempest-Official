@@ -71,17 +71,26 @@ document.addEventListener("DOMContentLoaded", function () {
     const heroSections = document.querySelectorAll(".welcome-hero");
     const videoSections = document.querySelectorAll(".videos-section");
     const utilitySections = document.querySelectorAll(".utilities-section");
+    const communitySections = document.querySelectorAll(".community-section");
 
-    const allCards = [...heroSections, ...videoSections, ...utilitySections];
+    const allCards = [
+      ...heroSections,
+      ...videoSections,
+      ...utilitySections,
+      ...communitySections,
+    ];
+
     allCards.forEach((card) => {
       card.classList.remove("hidden-content");
     });
 
     noResultsElem.classList.add("hidden-content");
 
+    // When viewing Utilities only, hide Hero, Videos, AND Community cards
     if (filterType === "utilities") {
       heroSections.forEach((el) => el.classList.add("hidden-content"));
       videoSections.forEach((el) => el.classList.add("hidden-content"));
+      communitySections.forEach((el) => el.classList.add("hidden-content"));
     }
   }
 
@@ -100,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       targetCards = Array.from(
         document.querySelectorAll(
-          ".welcome-hero, .videos-section, .utilities-section",
+          ".welcome-hero, .videos-section, .utilities-section, .community-section",
         ),
       );
     }
