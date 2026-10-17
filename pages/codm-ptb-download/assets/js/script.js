@@ -1,9 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
   // 3 Sequential Fallback Repositories for Shared Config Manifest (`codm-config.js`) using GitHub Pages
   const repoConfigs = [
-    { url: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.1/codm-test-server/codm-config.js", name: "Repository 1", base: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.1/codm-test-server/" },
-    { url: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.2/codm-test-server/codm-config.js", name: "Repository 2", base: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.2/codm-test-server/" },
-    { url: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.3/codm-test-server/codm-config.js", name: "Repository 3", base: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.3/codm-test-server/" }
+    {
+      url: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.1/codm-test-server/codm-config.js",
+      name: "Repository 1",
+      base: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.1/codm-test-server/",
+    },
+    {
+      url: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.2/codm-test-server/codm-config.js",
+      name: "Repository 2",
+      base: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.2/codm-test-server/",
+    },
+    {
+      url: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.3/codm-test-server/codm-config.js",
+      name: "Repository 3",
+      base: "https://mob-extra.github.io/MOBEXTRA.github.shared-data-repo.3/codm-test-server/",
+    },
   ];
 
   let currentIndex = 0;
@@ -13,13 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let verifyData = null;
   let loadedServerData = null; // Holds info for sharing
 
-  const MAIN_PTB_HUB_URL = "https://mob-extra.github.io/CODM.TestServer.DL.Link/";
+  const MAIN_PTB_HUB_URL =
+    "https://mob-extra.github.io/CODM.TestServer.DL.Link/";
 
   // DOM Elements
   const bodyEl = document.getElementById("pageBody");
   const serverInfoContainer = document.getElementById("serverInfoContainer");
   const linksGridContainer = document.getElementById("linksGridContainer");
-  const verificationGatewayContainer = document.getElementById("verificationGatewayContainer");
+  const verificationGatewayContainer = document.getElementById(
+    "verificationGatewayContainer",
+  );
 
   // Prevent Context Menu & Keyboard Copy Shortcuts before verification
   document.addEventListener("contextmenu", (e) => {
@@ -31,10 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("keydown", (e) => {
     if (!isUnlocked) {
-      if (e.ctrlKey && (e.key === 'a' || e.key === 'c' || e.key === 'u' || e.key === 's')) {
+      if (
+        e.ctrlKey &&
+        (e.key === "a" || e.key === "c" || e.key === "u" || e.key === "s")
+      ) {
         e.preventDefault();
       }
-      if (e.key === 'F12') e.preventDefault();
+      if (e.key === "F12") e.preventDefault();
     }
   });
 
@@ -44,7 +62,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("selectstart", (e) => {
     if (!isUnlocked) {
-      if (e.target && (e.target.tagName === 'INPUT' || e.target.closest('#verificationGateway'))) {
+      if (
+        e.target &&
+        (e.target.tagName === "INPUT" ||
+          e.target.closest("#verificationGateway"))
+      ) {
         return;
       }
       e.preventDefault();
@@ -90,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
     script.src = currentRepo.url;
     script.async = true;
 
-    script.onload = function() {
+    script.onload = function () {
       activeRepoName = currentRepo.name;
 
       if (typeof notARobot !== "undefined") {
@@ -98,7 +120,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Ensure valid test server data and links exist before displaying them and starting the timer
-      if (typeof testServerData !== "undefined" && testServerData.links && testServerData.links.length > 0) {
+      if (
+        typeof testServerData !== "undefined" &&
+        testServerData.links &&
+        testServerData.links.length > 0
+      ) {
         loadedServerData = testServerData;
         renderServerData(testServerData);
 
@@ -107,12 +133,16 @@ document.addEventListener("DOMContentLoaded", () => {
           renderVerificationGateway();
         }, 3000);
       } else {
-        console.warn("Download links are missing or failed to load. Verification gateway will remain hidden.");
+        console.warn(
+          "Download links are missing or failed to load. Verification gateway will remain hidden.",
+        );
       }
     };
-    
-    script.onerror = function() {
-      console.warn(`Repository #${currentIndex + 1} (${currentRepo.name}) failed. Switching to next repository...`);
+
+    script.onerror = function () {
+      console.warn(
+        `Repository #${currentIndex + 1} (${currentRepo.name}) failed. Switching to next repository...`,
+      );
       currentIndex++;
       loadSharedConfigWithFallback();
     };
@@ -187,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (verifyBtn) verifyBtn.addEventListener("click", handleVerification);
     if (verifyInput) {
       verifyInput.addEventListener("keypress", (e) => {
-        if (e.key === 'Enter') handleVerification();
+        if (e.key === "Enter") handleVerification();
       });
     }
   }
@@ -232,15 +262,15 @@ document.addEventListener("DOMContentLoaded", () => {
       bodyEl.removeAttribute("onselectstart");
     }
     if (linksGridContainer) linksGridContainer.classList.remove("locked");
-    
+
     const gatewayBox = document.getElementById("verificationGateway");
     if (gatewayBox) gatewayBox.style.display = "none";
-    
+
     // Smoothly scroll down to the Season info container
     if (serverInfoContainer) {
-      serverInfoContainer.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
+      serverInfoContainer.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
       });
     }
 
@@ -250,29 +280,32 @@ document.addEventListener("DOMContentLoaded", () => {
   // Render Server Info & Download Cards
   function renderServerData(data) {
     const isOnline = data.status === 1;
-    
+
     const serverStatusBadge = isOnline
       ? `<span class="status-badge online"><i class="fa-solid fa-wifi fa-beat-fade"></i> Live</span>`
       : `<span class="status-badge closed"><i class="fa-solid fa-triangle-exclamation fa-beat-fade"></i> Closed</span>`;
 
-    const releaseDateText = data.releaseDate || data.lastUpdated || 'Recently Released';
+    const releaseDateText =
+      data.releaseDate || data.lastUpdated || "Recently Released";
 
     if (serverInfoContainer) {
       serverInfoContainer.innerHTML = `
         <div class="server-status-header">
-          <h3>${data.season || 'CODM Test Server'}</h3>
+          <h3>${data.season || "CODM Test Server"}</h3>
           ${serverStatusBadge}
         </div>
         <div class="meta-row">
           <p><strong><i class="fa-regular fa-calendar-check"></i> Release Date:</strong> ${releaseDateText}</p>
-          <p><strong><i class="fa-solid fa-list-check"></i> Patch Summary:</strong> ${data.updateDescription || 'No description available.'}</p>
+          <p><strong><i class="fa-solid fa-list-check"></i> Patch Summary:</strong> ${data.updateDescription || "No description available."}</p>
         </div>
         <!-- Repo Source Section -->
         <div class="meta-row" style="margin-top: 0.75rem; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
           <p style="margin: 0; font-size: 0.88rem;"><strong><i class="fa-solid fa-server"></i> Repo Source:</strong> <span style="color: var(--codm-gold); font-family: var(--font-heading);">${activeRepoName}</span></p>
           <span style="font-size: 0.75rem; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;">Synchronized</span>
         </div>
-        ${!isOnline ? `
+        ${
+          !isOnline
+            ? `
         <div class="server-closed-notice" style="margin-top: 1rem; background: rgba(230, 34, 34, 0.08); border: 1px solid rgba(230, 34, 34, 0.3); border-left: 3px solid var(--codm-red); padding: 0.85rem 1rem; border-radius: 4px;">
           <div style="display: flex; align-items: center; gap: 8px; color: var(--codm-red); font-family: var(--font-heading); font-size: 0.95rem; text-transform: uppercase; margin-bottom: 0.4rem;">
             <i class="fa-solid fa-triangle-exclamation fa-beat-fade"></i>
@@ -285,49 +318,53 @@ document.addEventListener("DOMContentLoaded", () => {
             To receive instant alerts when the new season is officially released, please visit <a href="${MAIN_PTB_HUB_URL}" target="_blank" rel="noopener noreferrer" style="color: var(--codm-gold); text-decoration: underline; word-break: break-all;">${MAIN_PTB_HUB_URL}</a> to enable site notification permissions.
           </p>
         </div>
-        ` : ''}
+        `
+            : ""
+        }
       `;
     }
 
     if (linksGridContainer) {
       if (data.links && data.links.length > 0) {
-        linksGridContainer.innerHTML = data.links.map(item => {
-          let imgFile = 'codm-ts-logo-A.png';
-          let faIconClass = 'fa-brands fa-android';
+        linksGridContainer.innerHTML = data.links
+          .map((item) => {
+            let imgFile = "codm-ts-logo-A.png";
+            let faIconClass = "fa-brands fa-android";
 
-          const deviceLower = item.device.toLowerCase();
-          if (deviceLower.includes('ios')) {
-            faIconClass = 'fa-brands fa-apple';
-            imgFile = 'codm-ts-logo-ios.png';
-          } else if (item.device.includes('32-bit')) {
-            imgFile = 'codm-ts-logo-A.png';
-          } else if (item.device.includes('64-bit')) {
-            imgFile = 'codm-ts-logo-A.png';
-          }
+            const deviceLower = item.device.toLowerCase();
+            if (deviceLower.includes("ios")) {
+              faIconClass = "fa-brands fa-apple";
+              imgFile = "codm-ts-logo-ios.png";
+            } else if (item.device.includes("32-bit")) {
+              imgFile = "codm-ts-logo-A.png";
+            } else if (item.device.includes("64-bit")) {
+              imgFile = "codm-ts-logo-A.png";
+            }
 
-          let iconUrl = `assets/images/${imgFile}`;
-          let bgUrl = iconUrl;
+            let iconUrl = `assets/img/${imgFile}`;
+            let bgUrl = iconUrl;
 
-          const deviceHasIcon = /<i\b[^>]*>/i.test(item.device);
-          let deviceTitleHTML = item.device;
+            const deviceHasIcon = /<i\b[^>]*>/i.test(item.device);
+            let deviceTitleHTML = item.device;
 
-          if (!deviceHasIcon) {
-            deviceTitleHTML = `<i class="${faIconClass}"></i> ${item.device}`;
-          }
+            if (!deviceHasIcon) {
+              deviceTitleHTML = `<i class="${faIconClass}"></i> ${item.device}`;
+            }
 
-          const linkOnline = item.status !== undefined ? item.status === 1 : isOnline;
-          const cardBadge = linkOnline
-            ? `<span class="status-badge online card-status-badge"><i class="fa-solid fa-wifi fa-beat-fade"></i> TEST SERVER LIVE</span>`
-            : `<span class="status-badge closed card-status-badge"><i class="fa-solid fa-triangle-exclamation fa-beat-fade"></i> TEST SERVER CLOSED</span>`;
+            const linkOnline =
+              item.status !== undefined ? item.status === 1 : isOnline;
+            const cardBadge = linkOnline
+              ? `<span class="status-badge online card-status-badge"><i class="fa-solid fa-wifi fa-beat-fade"></i> TEST SERVER LIVE</span>`
+              : `<span class="status-badge closed card-status-badge"><i class="fa-solid fa-triangle-exclamation fa-beat-fade"></i> TEST SERVER CLOSED</span>`;
 
-          return `
+            return `
             <div class="link-card" style="background-image: linear-gradient(180deg, rgba(11,13,15,0.72) 0%, rgba(11,13,15,0.95) 100%), url('${bgUrl}'); background-size: cover; background-position: center;">
               
               ${cardBadge}
 
               <div class="card-header-row">
                 <div class="app-icon-wrapper">
-                  <img src="${iconUrl}" alt="App Icon" class="card-app-icon-img" onerror="this.src='assets/images/favicon.png';" />
+                  <img src="${iconUrl}" alt="App Icon" class="card-app-icon-img" onerror="this.src='assets/img/favicon.png';" />
                 </div>
                 <div class="device-title">
                   ${deviceTitleHTML}
@@ -352,7 +389,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             </div>
           `;
-        }).join('');
+          })
+          .join("");
       } else {
         linksGridContainer.innerHTML = `<p style="text-align: center; color: var(--text-muted);">No active links available.</p>`;
       }
@@ -360,25 +398,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Native Share Feature with Info Carrier
-  window.shareHub = function() {
+  window.shareHub = function () {
     const pageUrl = window.location.href;
-    const season = loadedServerData?.season || 'CODM Public Test Server';
-    const releaseDate = loadedServerData?.releaseDate || loadedServerData?.lastUpdated || 'Latest';
-    const description = loadedServerData?.updateDescription || 'Official Call of Duty: Mobile PTB links for Android & iOS.';
+    const season = loadedServerData?.season || "CODM Public Test Server";
+    const releaseDate =
+      loadedServerData?.releaseDate ||
+      loadedServerData?.lastUpdated ||
+      "Latest";
+    const description =
+      loadedServerData?.updateDescription ||
+      "Official Call of Duty: Mobile PTB links for Android & iOS.";
 
     const shareTitle = `${season} — CODM Test Server Hub`;
     const shareText = `📱 COD Mobile Public Test Server Download\n\n🎮 ${season}\n📅 Release Date: ${releaseDate}\n📱 Platforms: Android (APK 32/64-Bit) & iOS (TestFlight)\n📝 Update Info: ${description}\n\nGet download links here:`;
-    
+
     if (navigator.share) {
-      navigator.share({
-        title: shareTitle,
-        text: shareText,
-        url: pageUrl
-      }).catch((err) => {
-        if (err.name !== 'AbortError') {
-          copyShareFallback(shareText, pageUrl);
-        }
-      });
+      navigator
+        .share({
+          title: shareTitle,
+          text: shareText,
+          url: pageUrl,
+        })
+        .catch((err) => {
+          if (err.name !== "AbortError") {
+            copyShareFallback(shareText, pageUrl);
+          }
+        });
     } else {
       copyShareFallback(shareText, pageUrl);
     }
@@ -386,20 +431,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function copyShareFallback(text, url) {
     const fullMessage = `${text}\n${url}`;
-    navigator.clipboard.writeText(fullMessage).then(() => {
-      showToast("Share info copied to clipboard!");
-    }).catch(() => {
-      showToast("Failed to copy share details.", true);
-    });
+    navigator.clipboard
+      .writeText(fullMessage)
+      .then(() => {
+        showToast("Share info copied to clipboard!");
+      })
+      .catch(() => {
+        showToast("Failed to copy share details.", true);
+      });
   }
 
-  window.copyPTBLink = function(url) {
+  window.copyPTBLink = function (url) {
     if (!isUnlocked) return;
-    navigator.clipboard.writeText(url).then(() => {
-      showToast("Link copied to clipboard!");
-    }).catch(() => {
-      showToast("Failed to copy link.", true);
-    });
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        showToast("Link copied to clipboard!");
+      })
+      .catch(() => {
+        showToast("Failed to copy link.", true);
+      });
   };
 
   const toastEl = document.getElementById("toast");
@@ -413,13 +464,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(() => {
       toastEl.style.opacity = "0";
-      setTimeout(() => { toastEl.style.display = "none"; }, 300);
+      setTimeout(() => {
+        toastEl.style.display = "none";
+      }, 300);
     }, 2400);
   }
 
   // Initialize data loading with sequential fallback across the 3 shared repos
   loadSharedConfigWithFallback();
-  
+
   // --- Notification Popup Logic ---
   const notificationPopup = document.getElementById("ptbNotificationPopup");
   const btnMaybeLater = document.getElementById("btnMaybeLater");
@@ -447,7 +500,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnAllowNotif) {
     btnAllowNotif.addEventListener("click", () => {
       dismissPopup();
-      window.open(MAIN_PTB_HUB_URL, '_blank', 'noopener,noreferrer');
+      window.open(MAIN_PTB_HUB_URL, "_blank", "noopener,noreferrer");
     });
   }
 
