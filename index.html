@@ -153,6 +153,9 @@
             <i class="fa-regular fa-bell"></i>
             <span class="badge-dot"></span>
           </button> -->
+          <button class="icon-btn" aria-label="Share">
+            <i class="fa-solid fa-share-nodes"></i>
+          </button>
         </div>
       </div>
     </header>
@@ -162,12 +165,13 @@
       <section class="welcome-hero">
         <div class="hero-content">
           <span class="hero-badge">
-            <img src="assets/img/favicon.png" alt="" /> MOB EXTRA
+            <img src="assets/img/favicon.png" alt="" />MOB EXTRA | SlimeSpace
           </span>
           <h1 class="hero-title">Custom Gaming Utilities & Web Tools</h1>
           <p class="hero-description">
-            Fast, lightweight, client-side web tools tailored for mobile gamers
-            and content creators. Built for reliability and smooth performance.
+            Your ultimate hub for fast, lightweight gaming web tools and instant
+            updates. Built for mobile gamers and creators who demand peak
+            performance.
           </p>
           <div class="hero-actions">
             <a
@@ -177,7 +181,12 @@
               class="btn-primary"
               >Explore Videos</a
             >
-            <a href="#utilities" class="btn-secondary">View Utilities</a>
+            <a
+              href="#"
+              class="btn-secondary nav-filter-btn"
+              data-filter="utilities"
+              >View Utilities</a
+            >
           </div>
         </div>
         <div class="hero-image-wrapper">
@@ -527,9 +536,20 @@
           <i class="fa-solid fa-users"></i>
           <span>Community</span>
         </a>
+        <a
+          href="https://mob-extra.github.io/SlimeSpace/legal.html"
+          class="nav-item"
+          aria-label="Terms & Privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="fa-regular fa-handshake"></i>
+          <span>Terms</span>
+        </a>
       </div>
     </nav>
 
     <script src="assets/js/search-filter.js"></script>
+    <script src="assets/js/share-handler.js"></script>
   </body>
 </html>

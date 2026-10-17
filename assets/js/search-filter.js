@@ -50,6 +50,16 @@ document.addEventListener("DOMContentLoaded", function () {
     searchInput.value = "";
     searchInput.blur();
     applyCurrentViewFilter();
+
+    // Clear query parameter from URL without reloading page
+    if (history.replaceState) {
+      const cleanUrl =
+        window.location.protocol +
+        "//" +
+        window.location.host +
+        window.location.pathname;
+      history.replaceState({ path: cleanUrl }, "", cleanUrl);
+    }
   }
 
   function applyCurrentViewFilter() {
@@ -75,35 +85,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  searchBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    if (searchBarContainer.classList.contains("hidden-content")) {
-      openSearch();
-    } else {
-      closeAndResetSearch();
-    }
-  });
-
-  // Clicking the '×' close button now fully resets the page to original view
-  closeSearchBtn.addEventListener("click", function () {
-    closeAndResetSearch();
-  });
-
-  // Hit Enter: closes search bar, dismisses keyboard, but keeps filtered results (per your preference)
-  searchInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      searchBarContainer.classList.add("hidden-content");
-      searchInput.blur();
-    }
-  });
-
-  // ==========================================
-  // SMART KEYWORD RANKING, SCROLL & NO-RESULTS
-  // ==========================================
-  searchInput.addEventListener("input", function (e) {
-    const rawQuery = e.target.value.toLowerCase().trim();
-    const keywords = rawQuery.split(/\s+/).filter(Boolean);
+  // Core Search & Filtering Execution Function
+  function executeSearch(rawQuery) {
+    const keywords = rawQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
 
     const activeBtn = document.querySelector(".nav-filter-btn.active");
     const currentScope = activeBtn
@@ -174,13 +158,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // Show or hide professional "No Results Found" message
     if (activeMatches === 0) {
       noResultsElem.classList.remove("hidden-content");
     } else {
       noResultsElem.classList.add("hidden-content");
 
-      // Auto-scroll smoothly to the top matching result card
       if (firstMatchedCard) {
         const headerOffset = 130;
         const elementPosition = firstMatchedCard.getBoundingClientRect().top;
@@ -193,17 +175,62 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       }
     }
+  }
+
+  searchBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    if (searchBarContainer.classList.contains("hidden-content")) {
+      openSearch();
+    } else {
+      closeAndResetSearch();
+    }
   });
 
-  // Bottom Navigation Filter Handler
+  closeSearchBtn.addEventListener("click", function () {
+    closeAndResetSearch();
+  });
+
+  searchInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      searchBarContainer.classList.add("hidden-content");
+      searchInput.blur();
+    }
+  });
+
+  searchInput.addEventListener("input", function (e) {
+    executeSearch(e.target.value);
+  });
+
+  // Bottom Navigation & Hero Filter Handler
   filterButtons.forEach((button) => {
     button.addEventListener("click", function (e) {
       e.preventDefault();
-      filterButtons.forEach((btn) => btn.classList.remove("active"));
-      this.classList.add("active");
+      const targetFilter = this.getAttribute("data-filter");
+
+      filterButtons.forEach((btn) => {
+        if (btn.getAttribute("data-filter") === targetFilter) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
 
       searchInput.value = "";
       applyCurrentViewFilter();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
   });
+
+  // ==========================================
+  // URL SEARCH PARAMETER HANDLER (ON LOAD)
+  // ==========================================
+  const urlParams = new URLSearchParams(window.location.search);
+  const sharedQuery = urlParams.get("search") || urlParams.get("q");
+
+  if (sharedQuery) {
+    openSearch();
+    searchInput.value = sharedQuery;
+    executeSearch(sharedQuery);
+  }
 });
