@@ -30,9 +30,9 @@ const SITE_CONFIG = {
     youtubeCommunity:
       "https://www.youtube.com/channel/UCbDtYZS08VvB6luAcyn08bQ/community",
     slimeSpaceHub: "https://mob-extra.github.io/SlimeSpace/",
-    emailAddress: "marcjohnfordc@gmail.com",
+    emailAddress: "mob.extra.contact@gmail.com",
     emailComposeUrl:
-      "https://mail.google.com/mail/?view=cm&fs=1&to=marcjohnfordc@gmail.com",
+      "https://mail.google.com/mail/?view=cm&fs=1&to=mob.extra.contact@gmail.com",
   },
 
   // Versioning and Dynamic Years
