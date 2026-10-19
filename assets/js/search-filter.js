@@ -1,3 +1,8 @@
+/**
+ * Vile Tempest Official — Search & Filtering Engine
+ * Handles live keyword filtering, section visibility, initial DOM order restoration,
+ * and navigation scroll handlers.
+ */
 document.addEventListener("DOMContentLoaded", function () {
   const searchBtn = document.querySelector(".icon-btn[aria-label='Search']");
   const siteHeader = document.querySelector(".site-header");
@@ -39,12 +44,21 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeSearchBtn = searchBarContainer.querySelector(".search-close-btn");
   const filterButtons = document.querySelectorAll(".nav-filter-btn");
 
+  // Store the pristine initial HTML order of cards on page load to prevent shuffling bugs
+  const initialCardOrder = mainContent
+    ? Array.from(
+        mainContent.querySelectorAll(
+          ".welcome-hero, .services-section, .contact-section, .videos-section, .utilities-section, .community-section",
+        ),
+      )
+    : [];
+
   function openSearch() {
     searchBarContainer.classList.remove("hidden-content");
     setTimeout(() => searchInput.focus(), 50);
   }
 
-  // Closes search bar AND fully resets page results back to original state
+  // Closes search bar AND fully restores page results back to original default sequence
   function closeAndResetSearch() {
     searchBarContainer.classList.add("hidden-content");
     searchInput.value = "";
@@ -69,16 +83,29 @@ document.addEventListener("DOMContentLoaded", function () {
       : "home";
 
     const heroSections = document.querySelectorAll(".welcome-hero");
+    const servicesSections = document.querySelectorAll(".services-section");
+    const contactSections = document.querySelectorAll(".contact-section");
     const videoSections = document.querySelectorAll(".videos-section");
     const utilitySections = document.querySelectorAll(".utilities-section");
     const communitySections = document.querySelectorAll(".community-section");
 
     const allCards = [
       ...heroSections,
+      ...servicesSections,
+      ...contactSections,
       ...videoSections,
       ...utilitySections,
       ...communitySections,
     ];
+
+    // Restore cards to their exact original DOM sequence before showing/hiding
+    if (mainContent) {
+      initialCardOrder.forEach((card) => {
+        mainContent.appendChild(card);
+      });
+      // Ensure noResultsElem stays at the very bottom
+      mainContent.appendChild(noResultsElem);
+    }
 
     allCards.forEach((card) => {
       card.classList.remove("hidden-content");
@@ -86,9 +113,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     noResultsElem.classList.add("hidden-content");
 
-    // When viewing Utilities only, hide Hero, Videos, AND Community cards
+    // When viewing Utilities only, hide Hero, Services, Contact, Videos, AND Community cards
     if (filterType === "utilities") {
       heroSections.forEach((el) => el.classList.add("hidden-content"));
+      servicesSections.forEach((el) => el.classList.add("hidden-content"));
+      contactSections.forEach((el) => el.classList.add("hidden-content"));
       videoSections.forEach((el) => el.classList.add("hidden-content"));
       communitySections.forEach((el) => el.classList.add("hidden-content"));
     }
@@ -109,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       targetCards = Array.from(
         document.querySelectorAll(
-          ".welcome-hero, .videos-section, .utilities-section, .community-section",
+          ".welcome-hero, .services-section, .contact-section, .videos-section, .utilities-section, .community-section",
         ),
       );
     }
@@ -122,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const scoredCards = targetCards.map((card) => {
       const text = card.textContent.toLowerCase();
       const titleElem = card.querySelector(
-        ".utility-title, .playlist-title, .hero-title",
+        ".utility-title, .playlist-title, .hero-title, .services-title, .contact-title",
       );
       const titleText = titleElem ? titleElem.textContent.toLowerCase() : "";
 
@@ -156,8 +185,9 @@ document.addEventListener("DOMContentLoaded", function () {
       if (item.matchedCount > 0) {
         activeMatches++;
         item.card.classList.remove("hidden-content");
+        // Re-append matching cards dynamically during active search
         if (mainContent) {
-          mainContent.insertBefore(item.card, noResultsElem);
+          mainContent.appendChild(item.card);
         }
         if (!firstMatchedCard) {
           firstMatchedCard = item.card;
@@ -166,6 +196,11 @@ document.addEventListener("DOMContentLoaded", function () {
         item.card.classList.add("hidden-content");
       }
     });
+
+    // Ensure noResultsElem remains at the end of the container
+    if (mainContent && noResultsElem) {
+      mainContent.appendChild(noResultsElem);
+    }
 
     if (activeMatches === 0) {
       noResultsElem.classList.remove("hidden-content");
@@ -230,6 +265,80 @@ document.addEventListener("DOMContentLoaded", function () {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   });
+
+  // ==========================================
+  // HEADER CONTACT BUTTON HANDLER
+  // ==========================================
+  const headerContactBtn = document.querySelector(
+    ".site-header .icon-btn[aria-label='Contact']",
+  );
+  if (headerContactBtn) {
+    headerContactBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const homeFilterBtn = document.querySelector(
+        ".nav-filter-btn[data-filter='home']",
+      );
+      if (homeFilterBtn && !homeFilterBtn.classList.contains("active")) {
+        homeFilterBtn.click();
+      }
+      setTimeout(() => {
+        const contactElem = document.getElementById("contact");
+        if (contactElem) {
+          const headerOffset = 90;
+          const elementPosition = contactElem.getBoundingClientRect().top;
+          const offsetPosition =
+            elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        }
+      }, 50);
+    });
+  }
+
+  // ==========================================
+  // BOTTOM NAV SERVICES BUTTON HANDLER
+  // ==========================================
+  const bottomNavServicesBtn = document.querySelector(
+    ".bottom-nav .nav-item[href='#services']",
+  );
+  if (bottomNavServicesBtn) {
+    bottomNavServicesBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      // 1. Keep the highlight on Home, do NOT highlight Services in bottom nav
+      const allNavItems = document.querySelectorAll(".bottom-nav .nav-item");
+      allNavItems.forEach((item) => item.classList.remove("active"));
+      const homeNavItem = document.querySelector(
+        ".bottom-nav .nav-item[aria-label='Home']",
+      );
+      if (homeNavItem) homeNavItem.classList.add("active");
+
+      // 2. Switch filter button state and unhide all sections
+      const homeBtn = document.querySelector(
+        ".nav-filter-btn[data-filter='home']",
+      );
+      const utilBtn = document.querySelector(
+        ".nav-filter-btn[data-filter='utilities']",
+      );
+      if (homeBtn && utilBtn) {
+        homeBtn.classList.add("active");
+        utilBtn.classList.remove("active");
+      }
+      const allHiddenSections = document.querySelectorAll(
+        ".welcome-hero, .services-section, .contact-section, .videos-section, .community-section",
+      );
+      allHiddenSections.forEach((el) => el.classList.remove("hidden-content"));
+
+      // 3. Smooth scroll directly to services section
+      const servicesElem = document.getElementById("services");
+      if (servicesElem) {
+        const headerOffset = 90;
+        const elementPosition = servicesElem.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+      }
+    });
+  }
 
   // ==========================================
   // URL SEARCH PARAMETER HANDLER (ON LOAD)
