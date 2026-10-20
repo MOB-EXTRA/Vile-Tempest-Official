@@ -12,12 +12,17 @@
   display: none !important;
 }
 
-/* Ensure smooth scroll leaves clearance for the fixed header */
+/* Ensure smooth scroll leaves clearance for the fixed header & adds proper vertical spacing */
+.services-section,
 .contact-section,
 .utilities-section,
 .videos-section,
-.community-section {
-  scroll-margin-top: 90px; /* Adjusts clearance below sticky header */
+.community-intel-section {
+  scroll-margin-top: 90px;
+}
+
+.videos-section {
+  margin: 24px 0; /* Adds consistent spacing between video sections */
 }
 /* ==========================================================================
    2. WELCOME HERO SECTION STYLES
@@ -176,7 +181,6 @@
 .services-section {
   margin: 24px 0;
   width: 100%;
-  scroll-margin-top: 90px;
 }
 
 .services-card-container {
@@ -690,153 +694,215 @@
 }
 
 /* ==========================================================================
-   4. FIXED / STICKY TOP SEARCH BAR STYLES
+   COMMUNITY INTEL HUB (Professional Compact Layout)
    ========================================================================== */
-.sticky-search-bar-wrapper {
-  position: sticky;
-  top: 70px;
-  z-index: 999;
-  background-color: rgba(11, 15, 23, 0.9);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-subtle);
-  padding: 14px 24px;
-  width: 100%;
-  box-shadow: var(--shadow-md);
-  transition: all var(--transition-fast);
-}
-
-.search-bar-inner {
-  max-width: 1200px;
-  margin: 0 auto;
+.community-intel-section {
+  margin: 20px 0;
   width: 100%;
 }
 
-.search-input-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: var(--bg-surface);
-  border: 1.5px solid var(--accent-primary);
-  border-radius: var(--radius-full);
-  padding: 10px 20px;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
-}
-
-.search-input-wrapper i {
-  color: var(--accent-primary);
-  font-size: 16px;
-}
-
-.search-input-wrapper input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text-primary);
-  font-size: 15px;
-  font-weight: 500;
-  font-family: var(--font-body);
-}
-
-.search-input-wrapper input::placeholder {
-  color: var(--text-muted);
-}
-
-.search-close-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  color: var(--text-secondary);
-  font-size: 16px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.search-close-btn:hover {
-  background: var(--bg-subtle);
-  color: var(--text-primary);
-}
-
-/* ==========================================================================
-   5. COMMUNITY FEED CARDS (REDDIT & X / TWITTER)
-   ========================================================================== */
-.community-section {
-  margin: 32px 0;
-  width: 100%;
-}
-
-.reddit-icon {
-  background-color: rgba(255, 69, 0, 0.12) !important;
-  color: #ff4500 !important;
-}
-
-.twitter-icon {
-  background-color: rgba(29, 161, 242, 0.12) !important;
-  color: #1da1f2 !important;
-}
-
-.reddit-post-loading {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--text-secondary);
-  font-size: 14px;
-  padding: 12px 0;
-}
-
-.community-post-content {
+.community-intel-card-container {
+  background: var(--bg-surface, #0f172a);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.1));
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 4px;
+  gap: 14px;
 }
 
-.community-post-title {
-  font-size: 1.05rem;
+.community-intel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.community-intel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent-primary, #38bdf8);
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--text-primary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.community-intel-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.community-intel-subtitle {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
   line-height: 1.35;
 }
 
-.community-post-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.78rem;
-  color: var(--accent-cyan, #38bdf8);
-  font-weight: 600;
+/* 2-Column Responsive Grid */
+.community-intel-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
 
-.community-post-snippet {
-  font-size: 0.82rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-top: 4px;
+@media (min-width: 640px) {
+  .community-intel-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Individual Card Styling */
+.intel-item-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.intel-item-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.intel-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.intel-badge-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.intel-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+.reddit-bg {
+  background: rgba(255, 69, 0, 0.15);
+  color: #ff4500;
+}
+
+.twitter-bg {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+.intel-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.intel-platform {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.intel-handle {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.intel-status-tag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.tag-official {
+  background: rgba(255, 69, 0, 0.12);
+  color: #ff5722;
+  border: 1px solid rgba(255, 69, 0, 0.3);
+}
+
+.tag-leaks {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.intel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.intel-item-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.intel-item-desc {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* Action Buttons */
+.btn-intel-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-top: 2px;
 }
 
 .reddit-btn {
-  background: linear-gradient(135deg, #ff4500, #d03700) !important;
+  background: linear-gradient(135deg, #ff4500, #d03700);
   color: #ffffff !important;
 }
 
 .reddit-btn:hover {
-  color: #ffffff !important;
+  opacity: 0.9;
+  box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
 }
 
 .twitter-btn {
-  background: linear-gradient(135deg, #0f1419, #253341) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #38bdf8 !important;
 }
 
 .twitter-btn:hover {
-  background: linear-gradient(135deg, #253341, #0f1419) !important;
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
 }
 
 /* ==========================================================================

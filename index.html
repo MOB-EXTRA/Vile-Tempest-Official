@@ -183,18 +183,30 @@
           rel="noopener noreferrer"
           class="site-name-link config-link-yt"
         >
-          <div class="site-name">
-            <span class="brand-accent">Vile Tempest</span> Official
+          <div class="site-brand-badge">
+            <img
+              src="assets/img/favicon.png"
+              alt="Vile Tempest Official Logo"
+              class="header-brand-logo"
+            />
+            <div class="site-name">
+              <span class="brand-accent">Vile Tempest</span>
+              <span class="brand-suffix">Official</span>
+            </div>
           </div>
         </a>
+
         <div class="header-actions">
-          <button class="icon-btn" aria-label="Search">
+          <button class="icon-btn" aria-label="Search" title="Search Tools">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
-          <button class="icon-btn" aria-label="Contact">
+          <button class="icon-btn" aria-label="Filter" title="Filter View">
+            <i class="fa-solid fa-arrow-down-short-wide"></i>
+          </button>
+          <button class="icon-btn" aria-label="Contact" title="Contact Us">
             <i class="fa-regular fa-envelope"></i>
           </button>
-          <button class="icon-btn" aria-label="Share">
+          <button class="icon-btn" aria-label="Share" title="Share Page">
             <i class="fa-solid fa-share-nodes"></i>
           </button>
         </div>
@@ -236,7 +248,7 @@
               href="#"
               class="btn-secondary nav-filter-btn"
               data-filter="utilities"
-              >View Utilities
+              >Gaming Utilities
             </a>
             <a href="#services" class="btn-services-highlight">
               <i class="fa-solid fa-headset"></i>
@@ -504,6 +516,55 @@
         </a>
       </section>
 
+      <!-- First YouTube Video Embed (How to Download CODM Test Server) -->
+      <section class="videos-section">
+        <a
+          href="https://youtu.be/oRoUVGgtEpQ"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="playlist-ad-anchor"
+        >
+          <div class="playlist-embed-card">
+            <div class="playlist-iframe-wrapper">
+              <div class="iframe-shield"></div>
+              <iframe
+                src="https://www.youtube.com/embed/oRoUVGgtEpQ"
+                title="How to Download Call of Duty Mobile Test Server (iOS & Android Guide)"
+                allow="
+                  accelerometer;
+                  autoplay;
+                  clipboard-write;
+                  encrypted-media;
+                  gyroscope;
+                  picture-in-picture;
+                  compute-pressure 'none';
+                "
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+
+            <div class="playlist-meta">
+              <div class="playlist-info">
+                <h3 class="playlist-title">
+                  How to Download Call of Duty Mobile Test Server (iOS & Android
+                  Guide)
+                </h3>
+                <p class="playlist-desc">
+                  Step-by-step guide on how to download, install, and
+                  troubleshoot the official CODM Test Server on your mobile
+                  device.
+                </p>
+              </div>
+              <span class="playlist-link-btn">
+                <span>Watch on YouTube</span>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </span>
+            </div>
+          </div>
+        </a>
+      </section>
+
       <!-- Utility Card 1: PTB Download Links -->
       <section id="utilities" class="utilities-section">
         <div class="utility-card">
@@ -725,88 +786,91 @@
         </div>
       </section>
 
-      <!-- Reddit Community Card -->
-      <section class="community-section reddit-feed-section">
-        <div class="utility-card reddit-card">
-          <div class="utility-header">
-            <div class="utility-icon reddit-icon">
-              <i class="fa-brands fa-reddit-alien"></i>
+      <!-- Community Intel Hub (Compact & Detailed CODM Feed) -->
+      <section class="community-intel-section">
+        <div class="community-intel-card-container">
+          <div class="community-intel-header">
+            <div class="community-intel-badge">
+              <i class="fa-solid fa-users-viewfinder"></i>
+              <span>Call of Duty: Mobile • Community Feeds</span>
             </div>
-            <span class="utility-status-pill">OFFICIAL DEV COMMUNITY</span>
+            <h2 class="community-intel-title">Official Devs & Social Intel</h2>
+            <p class="community-intel-subtitle">
+              Direct access to official CODM developer logs, seasonal patch
+              notes, and community datamines.
+            </p>
           </div>
 
-          <div class="utility-body">
-            <div class="community-post-content">
-              <h3 class="community-post-title">CODM Official Community Hub</h3>
-              <div class="community-post-meta">
-                <span>
-                  <i class="fa-brands fa-reddit"></i> u/COD_Mobile_Official
-                </span>
+          <div class="community-intel-grid">
+            <!-- Reddit Official Hub Card -->
+            <div class="intel-item-card reddit-border">
+              <div class="intel-card-top">
+                <div class="intel-badge-wrapper">
+                  <div class="intel-icon reddit-bg">
+                    <i class="fa-brands fa-reddit-alien"></i>
+                  </div>
+                  <div class="intel-meta">
+                    <span class="intel-platform">Reddit</span>
+                    <span class="intel-handle">u/COD_Mobile_Official</span>
+                  </div>
+                </div>
+                <span class="intel-status-tag tag-official">Official Dev</span>
               </div>
-              <p class="community-post-snippet">
-                Get official patch notes, weekly developer community updates,
-                community feedback summaries, and official season updates
-                directly from the official Call of Duty: Mobile team.
-              </p>
-            </div>
-          </div>
 
-          <div class="utility-actions">
-            <a
-              href="https://www.reddit.com/user/COD_Mobile_Official/submitted/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-utility-primary reddit-btn"
-            >
-              <span>View Official Reddit</span>
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </a>
-            <button class="btn-utility-share" aria-label="Share Utility">
-              <i class="fa-solid fa-share-nodes"></i>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- X / Twitter Community Card -->
-      <section class="community-section twitter-feed-section">
-        <div class="utility-card twitter-card">
-          <div class="utility-header">
-            <div class="utility-icon twitter-icon">
-              <i class="fa-brands fa-x-twitter"></i>
-            </div>
-            <span class="utility-status-pill">COMMUNITY INTEL NETWORK</span>
-          </div>
-
-          <div class="utility-body">
-            <div class="community-post-content">
-              <h3 class="community-post-title">Leakers On Duty (X Intel)</h3>
-              <div class="community-post-meta">
-                <span>
-                  <i class="fa-brands fa-x-twitter"></i> @LeakersOnDuty
-                </span>
+              <div class="intel-body">
+                <h3 class="intel-item-title">CODM Developer Hub</h3>
+                <p class="intel-item-desc">
+                  Official seasonal patch notes, weekly community updates, and
+                  direct developer feedback threads.
+                </p>
               </div>
-              <p class="community-post-snippet">
-                Explore real-time community game leaks, upcoming weapon
-                blueprints, early patch intelligence, and event datamines
-                straight from the Leakers On Duty network.
-              </p>
-            </div>
-          </div>
 
-          <div class="utility-actions">
-            <a
-              href="https://x.com/LeakersOnDuty"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-utility-primary twitter-btn"
-            >
-              <span>Follow on X</span>
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </a>
-            <button class="btn-utility-share" aria-label="Share Utility">
-              <i class="fa-solid fa-share-nodes"></i>
-            </button>
+              <a
+                href="https://www.reddit.com/user/COD_Mobile_Official/submitted/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-intel-action reddit-btn"
+              >
+                <span>View Official Reddit</span>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
+
+            <!-- X / Twitter Leakers On Duty Card -->
+            <div class="intel-item-card twitter-border">
+              <div class="intel-card-top">
+                <div class="intel-badge-wrapper">
+                  <div class="intel-icon twitter-bg">
+                    <i class="fa-brands fa-x-twitter"></i>
+                  </div>
+                  <div class="intel-meta">
+                    <span class="intel-platform">X / Twitter</span>
+                    <span class="intel-handle">@LeakersOnDuty</span>
+                  </div>
+                </div>
+                <span class="intel-status-tag tag-leaks"
+                  >Intel & Datamines</span
+                >
+              </div>
+
+              <div class="intel-body">
+                <h3 class="intel-item-title">Leakers On Duty (CODM Intel)</h3>
+                <p class="intel-item-desc">
+                  Real-time CODM leaks, upcoming weapon blueprints, early patch
+                  information, and event datamines.
+                </p>
+              </div>
+
+              <a
+                href="https://x.com/LeakersOnDuty"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-intel-action twitter-btn"
+              >
+                <span>Follow Leakers On Duty</span>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
           </div>
         </div>
       </section>

@@ -1,12 +1,17 @@
 /**
- * Vile Tempest Official — Search & Filtering Engine
- * Handles live keyword filtering, section visibility, initial DOM order restoration,
- * and navigation scroll handlers.
+ * Vile Tempest Official — Search & Dynamic Filtering Engine
+ * Handles live keyword filtering, dynamic filter dropdown, infinite scrolling quick link ticker bar,
+ * section visibility, initial DOM order restoration, and navigation scroll handlers.
  */
 document.addEventListener("DOMContentLoaded", function () {
   const searchBtn = document.querySelector(".icon-btn[aria-label='Search']");
+  const filterBtn = document.querySelector(".icon-btn[aria-label='Filter']");
+  const headerContactBtn = document.querySelector(
+    ".site-header .icon-btn[aria-label='Contact']",
+  );
   const siteHeader = document.querySelector(".site-header");
   const mainContent = document.querySelector(".main-content");
+  const headerActions = document.querySelector(".header-actions");
 
   // Create sticky top search bar container
   const searchBarContainer = document.createElement("div");
@@ -32,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
     </div>
   `;
 
-  // Insert search bar right after the site header, and no-results inside main content
   if (siteHeader) {
     siteHeader.insertAdjacentElement("afterend", searchBarContainer);
   }
@@ -44,28 +48,224 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeSearchBtn = searchBarContainer.querySelector(".search-close-btn");
   const filterButtons = document.querySelectorAll(".nav-filter-btn");
 
-  // Store the pristine initial HTML order of cards on page load to prevent shuffling bugs
+  // Store initial pristine HTML card sequence
   const initialCardOrder = mainContent
     ? Array.from(
         mainContent.querySelectorAll(
-          ".welcome-hero, .services-section, .contact-section, .videos-section, .utilities-section, .community-section",
+          ".welcome-hero, .services-section, .contact-section, .videos-section, .utilities-section, .community-intel-section, .seo-sr-only",
         ),
       )
     : [];
+
+  // ==========================================================================
+  // DYNAMIC QUICK LINK TICKER BAR (Infinite Leftward Scroll)
+  // ==========================================================================
+  let tickerBar = null;
+
+  function buildQuickTickerBar() {
+    if (!siteHeader) return;
+
+    tickerBar = document.createElement("div");
+    tickerBar.className = "quick-ticker-bar";
+
+    const titleElements = document.querySelectorAll(
+      ".utility-title, .playlist-title, .services-title, .intel-item-title, .contact-title",
+    );
+
+    const extractedTopics = new Set();
+    titleElements.forEach((el) => {
+      let text = el.textContent.trim().replace(/\|.*$/, "").trim();
+      if (text.length > 0 && text.length < 35) {
+        extractedTopics.add(text);
+      }
+    });
+
+    const topicsArray = Array.from(extractedTopics);
+    if (topicsArray.length === 0) return;
+
+    let trackInner = "";
+    const buildSet = () => {
+      topicsArray.forEach((topic) => {
+        trackInner += `
+          <button type="button" class="ticker-chip" data-keyword="${topic}">
+            <i class="fa-solid fa-bolt"></i>
+            <span>${topic}</span>
+          </button>
+        `;
+      });
+    };
+
+    buildSet();
+    buildSet();
+
+    tickerBar.innerHTML = `<div class="quick-ticker-track">${trackInner}</div>`;
+    siteHeader.insertAdjacentElement("afterend", tickerBar);
+
+    tickerBar.querySelectorAll(".ticker-chip").forEach((chip) => {
+      chip.addEventListener("click", function () {
+        const keyword = this.getAttribute("data-keyword");
+        // Ensure we are in home view first
+        const homeBtn = document.querySelector(
+          ".nav-filter-btn[data-filter='home']",
+        );
+        if (homeBtn && !homeBtn.classList.contains("active")) {
+          homeBtn.click();
+        } else {
+          resetPageToOriginalState();
+        }
+
+        openSearch();
+        if (searchInput) searchInput.value = keyword;
+        executeSearch(keyword);
+      });
+    });
+  }
+
+  buildQuickTickerBar();
+
+  // ==========================================================================
+  // DYNAMIC FILTER DROPDOWN GENERATOR
+  // ==========================================================================
+  let filterDropdownMenu = null;
+
+  function buildDynamicFilterDropdown() {
+    if (!headerActions) return;
+
+    filterDropdownMenu = document.createElement("div");
+    filterDropdownMenu.className = "filter-dropdown-menu";
+
+    const titleElements = document.querySelectorAll(
+      ".utility-title, .playlist-title, .services-title, .intel-item-title, .contact-title",
+    );
+
+    const extractedTopics = new Set();
+    extractedTopics.add("Show All Content");
+
+    titleElements.forEach((el) => {
+      let text = el.textContent.trim().replace(/\|.*$/, "").trim();
+      if (text.length > 0 && text.length < 35) {
+        extractedTopics.add(text);
+      }
+    });
+
+    let dropdownHtml = `
+      <div class="filter-dropdown-header">Quick View Filters</div>
+      <ul class="filter-dropdown-list">
+    `;
+
+    extractedTopics.forEach((topic) => {
+      const isAll = topic === "Show All Content";
+      dropdownHtml += `
+        <li class="filter-dropdown-item ${isAll ? "active" : ""}" data-keyword="${isAll ? "" : topic}">
+          <span>${topic}</span>
+          <i class="fa-solid fa-check"></i>
+        </li>
+      `;
+    });
+
+    dropdownHtml += `</ul>`;
+    filterDropdownMenu.innerHTML = dropdownHtml;
+    headerActions.appendChild(filterDropdownMenu);
+
+    filterDropdownMenu
+      .querySelectorAll(".filter-dropdown-item")
+      .forEach((item) => {
+        item.addEventListener("click", function () {
+          const keyword = this.getAttribute("data-keyword");
+
+          filterDropdownMenu
+            .querySelectorAll(".filter-dropdown-item")
+            .forEach((i) => {
+              i.classList.remove("active");
+            });
+          this.classList.add("active");
+
+          // Force switch back to Home view first so all sections reappear
+          const homeBtn = document.querySelector(
+            ".nav-filter-btn[data-filter='home']",
+          );
+          if (homeBtn && !homeBtn.classList.contains("active")) {
+            homeBtn.click();
+          } else {
+            resetPageToOriginalState();
+          }
+
+          if (!keyword) {
+            resetPageToOriginalState();
+          } else {
+            openSearch();
+            searchInput.value = keyword;
+            executeSearch(keyword);
+          }
+
+          filterDropdownMenu.classList.remove("active");
+        });
+      });
+  }
+
+  buildDynamicFilterDropdown();
+
+  if (filterBtn) {
+    filterBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (filterDropdownMenu) {
+        filterDropdownMenu.classList.toggle("active");
+      }
+    });
+  }
+
+  document.addEventListener("click", function (e) {
+    if (
+      filterDropdownMenu &&
+      filterDropdownMenu.classList.contains("active") &&
+      !filterDropdownMenu.contains(e.target) &&
+      !filterBtn.contains(e.target)
+    ) {
+      filterDropdownMenu.classList.remove("active");
+    }
+  });
 
   function openSearch() {
     searchBarContainer.classList.remove("hidden-content");
     setTimeout(() => searchInput.focus(), 50);
   }
 
-  // Closes search bar AND fully restores page results back to original default sequence
-  function closeAndResetSearch() {
+  function resetPageToOriginalState() {
     searchBarContainer.classList.add("hidden-content");
-    searchInput.value = "";
-    searchInput.blur();
-    applyCurrentViewFilter();
+    if (searchInput) {
+      searchInput.value = "";
+      searchInput.blur();
+    }
 
-    // Clear query parameter from URL without reloading page
+    filterButtons.forEach((btn) => {
+      if (btn.getAttribute("data-filter") === "home") {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    });
+
+    if (tickerBar) {
+      tickerBar.classList.remove("hidden-content");
+    }
+
+    if (mainContent) {
+      initialCardOrder.forEach((card) => {
+        mainContent.appendChild(card);
+      });
+    }
+
+    const allCards = document.querySelectorAll(
+      ".welcome-hero, .services-section, .contact-section, .videos-section, .utilities-section, .community-intel-section, .seo-sr-only",
+    );
+    allCards.forEach((card) => {
+      card.classList.remove("hidden-content");
+    });
+
+    if (noResultsElem) {
+      noResultsElem.classList.add("hidden-content");
+    }
+
     if (history.replaceState) {
       const cleanUrl =
         window.location.protocol +
@@ -87,7 +287,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const contactSections = document.querySelectorAll(".contact-section");
     const videoSections = document.querySelectorAll(".videos-section");
     const utilitySections = document.querySelectorAll(".utilities-section");
-    const communitySections = document.querySelectorAll(".community-section");
+    const communitySections = document.querySelectorAll(
+      ".community-intel-section",
+    );
 
     const allCards = [
       ...heroSections,
@@ -98,22 +300,29 @@ document.addEventListener("DOMContentLoaded", function () {
       ...communitySections,
     ];
 
-    // Restore cards to their exact original DOM sequence before showing/hiding
     if (mainContent) {
       initialCardOrder.forEach((card) => {
         mainContent.appendChild(card);
       });
-      // Ensure noResultsElem stays at the very bottom
-      mainContent.appendChild(noResultsElem);
+      if (noResultsElem) {
+        mainContent.appendChild(noResultsElem);
+      }
     }
 
     allCards.forEach((card) => {
       card.classList.remove("hidden-content");
     });
 
-    noResultsElem.classList.add("hidden-content");
+    if (noResultsElem) {
+      noResultsElem.classList.add("hidden-content");
+    }
 
-    // When viewing Utilities only, hide Hero, Services, Contact, Videos, AND Community cards
+    if (filterType === "home") {
+      if (tickerBar) tickerBar.classList.remove("hidden-content");
+    } else {
+      if (tickerBar) tickerBar.classList.add("hidden-content");
+    }
+
     if (filterType === "utilities") {
       heroSections.forEach((el) => el.classList.add("hidden-content"));
       servicesSections.forEach((el) => el.classList.add("hidden-content"));
@@ -123,7 +332,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Core Search & Filtering Execution Function
   function executeSearch(rawQuery) {
     const keywords = rawQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
 
@@ -138,7 +346,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       targetCards = Array.from(
         document.querySelectorAll(
-          ".welcome-hero, .services-section, .contact-section, .videos-section, .utilities-section, .community-section",
+          ".welcome-hero, .services-section, .contact-section, .videos-section, .utilities-section, .community-intel-section",
         ),
       );
     }
@@ -151,7 +359,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const scoredCards = targetCards.map((card) => {
       const text = card.textContent.toLowerCase();
       const titleElem = card.querySelector(
-        ".utility-title, .playlist-title, .hero-title, .services-title, .contact-title",
+        ".utility-title, .playlist-title, .hero-title, .services-title, .contact-title, .intel-item-title",
       );
       const titleText = titleElem ? titleElem.textContent.toLowerCase() : "";
 
@@ -185,7 +393,6 @@ document.addEventListener("DOMContentLoaded", function () {
       if (item.matchedCount > 0) {
         activeMatches++;
         item.card.classList.remove("hidden-content");
-        // Re-append matching cards dynamically during active search
         if (mainContent) {
           mainContent.appendChild(item.card);
         }
@@ -197,15 +404,14 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // Ensure noResultsElem remains at the end of the container
     if (mainContent && noResultsElem) {
       mainContent.appendChild(noResultsElem);
     }
 
     if (activeMatches === 0) {
-      noResultsElem.classList.remove("hidden-content");
+      if (noResultsElem) noResultsElem.classList.remove("hidden-content");
     } else {
-      noResultsElem.classList.add("hidden-content");
+      if (noResultsElem) noResultsElem.classList.add("hidden-content");
 
       if (firstMatchedCard) {
         const headerOffset = 130;
@@ -221,32 +427,76 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  searchBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    if (searchBarContainer.classList.contains("hidden-content")) {
-      openSearch();
+  function navigateToSection(targetId) {
+    const homeBtn = document.querySelector(
+      ".nav-filter-btn[data-filter='home']",
+    );
+    if (homeBtn && !homeBtn.classList.contains("active")) {
+      homeBtn.click();
     } else {
-      closeAndResetSearch();
+      resetPageToOriginalState();
     }
-  });
 
-  closeSearchBtn.addEventListener("click", function () {
-    closeAndResetSearch();
-  });
+    setTimeout(() => {
+      const targetElem = document.getElementById(targetId);
+      if (targetElem) {
+        const headerOffset = 90;
+        const elementPosition = targetElem.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+      }
+    }, 50);
+  }
 
-  searchInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
+  if (headerContactBtn) {
+    headerContactBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      searchBarContainer.classList.add("hidden-content");
-      searchInput.blur();
-    }
-  });
+      navigateToSection("contact");
+    });
+  }
 
-  searchInput.addEventListener("input", function (e) {
-    executeSearch(e.target.value);
-  });
+  const bottomNavServicesBtn = document.querySelector(
+    ".bottom-nav .nav-item[href='#services']",
+  );
+  if (bottomNavServicesBtn) {
+    bottomNavServicesBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      navigateToSection("services");
+    });
+  }
 
-  // Bottom Navigation & Hero Filter Handler
+  if (searchBtn) {
+    searchBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (searchBarContainer.classList.contains("hidden-content")) {
+        openSearch();
+      } else {
+        resetPageToOriginalState();
+      }
+    });
+  }
+
+  if (closeSearchBtn) {
+    closeSearchBtn.addEventListener("click", function () {
+      resetPageToOriginalState();
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        searchBarContainer.classList.add("hidden-content");
+        searchInput.blur();
+      }
+    });
+
+    searchInput.addEventListener("input", function (e) {
+      executeSearch(e.target.value);
+    });
+  }
+
   filterButtons.forEach((button) => {
     button.addEventListener("click", function (e) {
       e.preventDefault();
@@ -260,95 +510,24 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
 
-      searchInput.value = "";
-      applyCurrentViewFilter();
+      if (searchInput) searchInput.value = "";
+
+      if (targetFilter === "home") {
+        resetPageToOriginalState();
+      } else {
+        applyCurrentViewFilter();
+      }
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   });
 
-  // ==========================================
-  // HEADER CONTACT BUTTON HANDLER
-  // ==========================================
-  const headerContactBtn = document.querySelector(
-    ".site-header .icon-btn[aria-label='Contact']",
-  );
-  if (headerContactBtn) {
-    headerContactBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      const homeFilterBtn = document.querySelector(
-        ".nav-filter-btn[data-filter='home']",
-      );
-      if (homeFilterBtn && !homeFilterBtn.classList.contains("active")) {
-        homeFilterBtn.click();
-      }
-      setTimeout(() => {
-        const contactElem = document.getElementById("contact");
-        if (contactElem) {
-          const headerOffset = 90;
-          const elementPosition = contactElem.getBoundingClientRect().top;
-          const offsetPosition =
-            elementPosition + window.pageYOffset - headerOffset;
-          window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-        }
-      }, 50);
-    });
-  }
-
-  // ==========================================
-  // BOTTOM NAV SERVICES BUTTON HANDLER
-  // ==========================================
-  const bottomNavServicesBtn = document.querySelector(
-    ".bottom-nav .nav-item[href='#services']",
-  );
-  if (bottomNavServicesBtn) {
-    bottomNavServicesBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-
-      // 1. Keep the highlight on Home, do NOT highlight Services in bottom nav
-      const allNavItems = document.querySelectorAll(".bottom-nav .nav-item");
-      allNavItems.forEach((item) => item.classList.remove("active"));
-      const homeNavItem = document.querySelector(
-        ".bottom-nav .nav-item[aria-label='Home']",
-      );
-      if (homeNavItem) homeNavItem.classList.add("active");
-
-      // 2. Switch filter button state and unhide all sections
-      const homeBtn = document.querySelector(
-        ".nav-filter-btn[data-filter='home']",
-      );
-      const utilBtn = document.querySelector(
-        ".nav-filter-btn[data-filter='utilities']",
-      );
-      if (homeBtn && utilBtn) {
-        homeBtn.classList.add("active");
-        utilBtn.classList.remove("active");
-      }
-      const allHiddenSections = document.querySelectorAll(
-        ".welcome-hero, .services-section, .contact-section, .videos-section, .community-section",
-      );
-      allHiddenSections.forEach((el) => el.classList.remove("hidden-content"));
-
-      // 3. Smooth scroll directly to services section
-      const servicesElem = document.getElementById("services");
-      if (servicesElem) {
-        const headerOffset = 90;
-        const elementPosition = servicesElem.getBoundingClientRect().top;
-        const offsetPosition =
-          elementPosition + window.pageYOffset - headerOffset;
-        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-      }
-    });
-  }
-
-  // ==========================================
-  // URL SEARCH PARAMETER HANDLER (ON LOAD)
-  // ==========================================
   const urlParams = new URLSearchParams(window.location.search);
   const sharedQuery = urlParams.get("search") || urlParams.get("q");
 
   if (sharedQuery) {
     openSearch();
-    searchInput.value = sharedQuery;
+    if (searchInput) searchInput.value = sharedQuery;
     executeSearch(sharedQuery);
   }
 });
