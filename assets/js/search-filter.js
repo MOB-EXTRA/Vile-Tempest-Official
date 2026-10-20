@@ -104,7 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
     tickerBar.querySelectorAll(".ticker-chip").forEach((chip) => {
       chip.addEventListener("click", function () {
         const keyword = this.getAttribute("data-keyword");
-        // Ensure we are in home view first
         const homeBtn = document.querySelector(
           ".nav-filter-btn[data-filter='home']",
         );
@@ -193,8 +192,9 @@ document.addEventListener("DOMContentLoaded", function () {
           if (!keyword) {
             resetPageToOriginalState();
           } else {
-            openSearch();
-            searchInput.value = keyword;
+            // Keep search bar hidden/closed so mobile keyboard won't pop up
+            searchBarContainer.classList.add("hidden-content");
+            if (searchInput) searchInput.value = keyword;
             executeSearch(keyword);
           }
 
