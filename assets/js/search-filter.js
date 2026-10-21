@@ -113,8 +113,12 @@ document.addEventListener("DOMContentLoaded", function () {
           resetPageToOriginalState();
         }
 
-        openSearch();
-        if (searchInput) searchInput.value = keyword;
+        // Keep search bar hidden so mobile keyboard will NOT pop up
+        searchBarContainer.classList.add("hidden-content");
+        if (searchInput) {
+          searchInput.value = keyword;
+          searchInput.blur();
+        }
         executeSearch(keyword);
       });
     });
@@ -194,7 +198,10 @@ document.addEventListener("DOMContentLoaded", function () {
           } else {
             // Keep search bar hidden/closed so mobile keyboard won't pop up
             searchBarContainer.classList.add("hidden-content");
-            if (searchInput) searchInput.value = keyword;
+            if (searchInput) {
+              searchInput.value = keyword;
+              searchInput.blur();
+            }
             executeSearch(keyword);
           }
 

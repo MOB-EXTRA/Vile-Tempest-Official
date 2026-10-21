@@ -32,7 +32,10 @@ const SITE_CONFIG = {
     slimeSpaceHub: "https://mob-extra.github.io/SlimeSpace/",
     emailAddress: "mob.extra.contact@gmail.com",
     emailComposeUrl:
-      "https://mail.google.com/mail/?view=cm&fs=1&to=mob.extra.contact@gmail.com",
+      "mailto:mob.extra.contact@gmail.com?subject=Inquiry%20/%20Commission%20Request%20—%20Vile%20Tempest%20Official",
+    facebook: "https://facebook.com/vile.tempest.extra",
+    tiktok: "https://tiktok.com/@vile.tempest.extr",
+    twitter: "https://x.com/VileTempestExtr",
   },
 
   // Versioning and Dynamic Years
