@@ -166,35 +166,126 @@ function copyEmailAddress(email) {
   });
 }
 
-// 9. Global Secure Site View Counter (V2 API with 2,600 base offset)
-const BASE_OFFSET = 16420; // Adjust this value to set the initial view count offset
-const viewCounterElements = document.querySelectorAll(
-  "#page-views-count, .config-page-views-count",
-);
+/* ==========================================================================
+   Global Secure Site View Counter (V2 API with exact endpoint & base offset)
+   ========================================================================== */
+(function initGlobalViewCounter() {
+  const BASE_OFFSET = 16420; // Permanent base offset
 
-if (viewCounterElements.length > 0) {
-  fetch(
-    "https://api.counterapi.dev/v2/mob-extra-sites/vile-tempest-site-views/up",
-  )
-    .then((res) => {
-      if (!res.ok) throw new Error("API response not OK");
-      return res.json();
-    })
-    .then((data) => {
-      const count = data.data?.up ?? data.count;
-      if (typeof count === "number") {
-        const totalViews = BASE_OFFSET + count;
-        viewCounterElements.forEach((el) => {
-          el.textContent = totalViews.toLocaleString(); // Displays precise count e.g. 2,689
-        });
-      } else {
-        throw new Error("Invalid count value");
+  // 1. Dynamic CSS Injection for minimal background-free styling
+  function injectCounterStyles() {
+    if (document.getElementById("auto-view-counter-styles")) return;
+    const style = document.createElement("style");
+    style.id = "auto-view-counter-styles";
+    style.textContent = `
+      .hero-views-badge,
+      .auto-footer-views-container {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: transparent;
+        border: none;
+        padding: 0;
+        box-shadow: none;
       }
-    })
-    .catch((err) => {
-      console.warn("Secure view counter fallback active:", err);
-      viewCounterElements.forEach((el) => {
-        el.textContent = BASE_OFFSET.toLocaleString(); // Fallback displays exact baseline 2,600
+      .auto-footer-views-container {
+        justify-content: center;
+        padding: 12px 16px;
+        margin: 20px auto 10px auto;
+        width: fit-content;
+      }
+      .hero-views-badge .views-meta,
+      .auto-footer-views-container .views-meta {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        line-height: 1;
+      }
+      .hero-views-badge .views-label,
+      .auto-footer-views-container .views-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--text-muted, #94a3b8);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+      }
+      .hero-views-badge .views-number,
+      .auto-footer-views-container .views-number {
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: var(--accent-primary, #38bdf8);
+        font-family: var(--font-mono, monospace), monospace;
+        letter-spacing: 0.2px;
+      }
+      .hero-badges-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        margin-bottom: 20px;
+        width: 100%;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // 2. Auto-Inject HTML Widget at Webpage Bottom (Icon-free)
+  function injectCounterHTML() {
+    if (!document.querySelector(".auto-footer-views-container")) {
+      const footerWidget = document.createElement("div");
+      footerWidget.className = "auto-footer-views-container";
+      footerWidget.innerHTML = `
+        <div class="views-meta">
+          <span class="views-label">Total Website Views</span>
+          <span class="views-number config-page-views-count">Loading...</span>
+        </div>
+      `;
+      document.body.appendChild(footerWidget);
+    }
+
+    return document.querySelectorAll(
+      "#page-views-count, .config-page-views-count",
+    );
+  }
+
+  // 3. Increment & Fetch Global Count with your correct V2 endpoint
+  function fetchAndRenderViews(targets) {
+    fetch(
+      "https://api.counterapi.dev/v2/mob-extra-site-views/vile-tempest-site-views/up",
+    )
+      .then((res) => {
+        if (!res.ok) throw new Error("API response not OK");
+        return res.json();
+      })
+      .then((data) => {
+        const count = data.data?.up ?? data.count;
+        if (typeof count === "number") {
+          const totalViews = BASE_OFFSET + count;
+          targets.forEach((el) => {
+            el.textContent = totalViews.toLocaleString();
+          });
+        } else {
+          throw new Error("Invalid count response");
+        }
+      })
+      .catch((err) => {
+        console.warn("View counter fallback active:", err);
+        targets.forEach((el) => {
+          el.textContent = BASE_OFFSET.toLocaleString();
+        });
       });
+  }
+
+  // Execute after DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      injectCounterStyles();
+      const targets = injectCounterHTML();
+      fetchAndRenderViews(targets);
     });
-}
+  } else {
+    injectCounterStyles();
+    const targets = injectCounterHTML();
+    fetchAndRenderViews(targets);
+  }
+})();
