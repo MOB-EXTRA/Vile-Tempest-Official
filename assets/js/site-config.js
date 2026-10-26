@@ -248,7 +248,7 @@ function copyEmailAddress(email) {
     );
   }
 
-  // 3. Increment & Fetch Global Count with your correct V2 endpoint
+  // 3. Increment & Fetch Global Count with correct V2 property path
   function fetchAndRenderViews(targets) {
     fetch(
       "https://api.counterapi.dev/v2/mob-extra-site-views/vile-tempest-site-views/up",
@@ -258,7 +258,10 @@ function copyEmailAddress(email) {
         return res.json();
       })
       .then((data) => {
-        const count = data.data?.up ?? data.count;
+        // Correctly target up_count inside the nested data object
+        const count = data.data?.up_count ?? data.up_count ?? data.count;
+        console.log("Extracted view count:", count);
+
         if (typeof count === "number") {
           const totalViews = BASE_OFFSET + count;
           targets.forEach((el) => {
