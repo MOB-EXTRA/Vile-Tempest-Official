@@ -76,6 +76,56 @@
   text-decoration: underline;
 }
 
+/* ==========================================================================
+   MINIMALIST HERO VIEWS COUNTER (Always Stacked & Background-Free)
+   ========================================================================== */
+.hero-badges-wrapper {
+  display: flex;
+  flex-direction: column; /* Forces vertical stacking on ALL screen sizes */
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.hero-badges-wrapper .hero-badge {
+  margin-bottom: 0;
+}
+
+/* Background-free, subtle & highly readable view counter line */
+.hero-views-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent; /* Removes background color box */
+  border: none;
+  padding: 0 4px;
+  box-shadow: none;
+}
+
+.hero-views-badge .views-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+}
+
+.hero-views-badge .views-label {
+  font-size: 0.68rem; /* Compact yet crisp label */
+  font-weight: 700;
+  color: var(--text-muted, #94a3b8);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.hero-views-badge .views-number {
+  font-size: 0.75rem; /* Clean monospace highlight */
+  font-weight: 800;
+  color: var(--accent-primary, #38bdf8);
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.2px;
+}
+
 .hero-title {
   font-size: 32px;
   font-weight: 700;

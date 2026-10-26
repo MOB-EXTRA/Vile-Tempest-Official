@@ -165,3 +165,36 @@ function copyEmailAddress(email) {
     }, 2500);
   });
 }
+
+// 9. Global Secure Site View Counter (V2 API with 2,600 base offset)
+const BASE_OFFSET = 16420; // Adjust this value to set the initial view count offset
+const viewCounterElements = document.querySelectorAll(
+  "#page-views-count, .config-page-views-count",
+);
+
+if (viewCounterElements.length > 0) {
+  fetch(
+    "https://api.counterapi.dev/v2/mob-extra-sites/vile-tempest-site-views/up",
+  )
+    .then((res) => {
+      if (!res.ok) throw new Error("API response not OK");
+      return res.json();
+    })
+    .then((data) => {
+      const count = data.data?.up ?? data.count;
+      if (typeof count === "number") {
+        const totalViews = BASE_OFFSET + count;
+        viewCounterElements.forEach((el) => {
+          el.textContent = totalViews.toLocaleString(); // Displays precise count e.g. 2,689
+        });
+      } else {
+        throw new Error("Invalid count value");
+      }
+    })
+    .catch((err) => {
+      console.warn("Secure view counter fallback active:", err);
+      viewCounterElements.forEach((el) => {
+        el.textContent = BASE_OFFSET.toLocaleString(); // Fallback displays exact baseline 2,600
+      });
+    });
+}
