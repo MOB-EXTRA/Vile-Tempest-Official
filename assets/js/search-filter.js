@@ -68,14 +68,16 @@ document.addEventListener("DOMContentLoaded", function () {
     tickerBar = document.createElement("div");
     tickerBar.className = "quick-ticker-bar";
 
+    // Explicitly target utility titles, services title, and individual service headings
     const titleElements = document.querySelectorAll(
-      ".utility-title, .playlist-title, .services-title, .intel-item-title, .contact-title",
+      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title",
     );
 
     const extractedTopics = new Set();
     titleElements.forEach((el) => {
       let text = el.textContent.trim().replace(/\|.*$/, "").trim();
-      if (text.length > 0 && text.length < 35) {
+      // Increased character limit to 45 so longer titles like "Project Commissions & Services" fit safely
+      if (text.length > 0 && text.length < 45) {
         extractedTopics.add(text);
       }
     });
@@ -113,7 +115,6 @@ document.addEventListener("DOMContentLoaded", function () {
           resetPageToOriginalState();
         }
 
-        // Keep search bar hidden so mobile keyboard will NOT pop up
         searchBarContainer.classList.add("hidden-content");
         if (searchInput) {
           searchInput.value = keyword;
@@ -138,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
     filterDropdownMenu.className = "filter-dropdown-menu";
 
     const titleElements = document.querySelectorAll(
-      ".utility-title, .playlist-title, .services-title, .intel-item-title, .contact-title",
+      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title",
     );
 
     const extractedTopics = new Set();
@@ -146,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     titleElements.forEach((el) => {
       let text = el.textContent.trim().replace(/\|.*$/, "").trim();
-      if (text.length > 0 && text.length < 35) {
+      if (text.length > 0 && text.length < 45) {
         extractedTopics.add(text);
       }
     });
@@ -183,7 +184,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
           this.classList.add("active");
 
-          // Force switch back to Home view first so all sections reappear
           const homeBtn = document.querySelector(
             ".nav-filter-btn[data-filter='home']",
           );
@@ -196,7 +196,6 @@ document.addEventListener("DOMContentLoaded", function () {
           if (!keyword) {
             resetPageToOriginalState();
           } else {
-            // Keep search bar hidden/closed so mobile keyboard won't pop up
             searchBarContainer.classList.add("hidden-content");
             if (searchInput) {
               searchInput.value = keyword;
