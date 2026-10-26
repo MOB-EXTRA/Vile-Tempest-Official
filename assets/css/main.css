@@ -176,7 +176,7 @@
 }
 
 /* ==========================================================================
-   PROFESSIONAL SERVICES SECTION STYLES (Compact & Re-ordered)
+   PROFESSIONAL SERVICES SECTION STYLES (Compact & Side-by-Side Header Layout)
    ========================================================================== */
 .services-section {
   margin: 24px 0;
@@ -227,7 +227,7 @@
   line-height: 1.4;
 }
 
-/* Services Grid - 4 Columns for Compact Space Usage */
+/* Services Grid - Responsive Layout */
 .services-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -250,11 +250,11 @@
   background: var(--bg-subtle, #1e293b);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md, 10px);
-  padding: 16px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 14px;
+  gap: 10px;
   transition: all 0.25s ease;
 }
 
@@ -264,24 +264,42 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
+/* Side-by-Side Header Layout (Icon + Title) */
+.service-header-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .service-icon-wrapper {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  flex-shrink: 0;
 }
 
+.service-header-row h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.25;
+}
+
+/* Glow Variants for Service Icons */
 .web-dev-glow {
   background: rgba(56, 189, 248, 0.12);
   color: #38bdf8;
 }
 
 .cpp-glow {
-  background: rgba(34, 197, 94, 0.12);
-  color: #22c55e;
+  background: rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .sketchup-glow {
@@ -294,38 +312,36 @@
   color: #a855f7;
 }
 
+.vba-glow {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+
 .service-content {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.service-content h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0;
-}
-
 .service-content p {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 .service-tech-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .service-tech-tags span {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-subtle);
   color: var(--text-muted, #94a3b8);
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 600;
   padding: 2px 6px;
   border-radius: 4px;
@@ -335,16 +351,66 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: var(--accent-primary, #38bdf8);
   text-decoration: none;
   transition: opacity 0.2s ease;
+  margin-top: 2px;
 }
 
 .service-action-link:hover {
   opacity: 0.8;
   text-decoration: underline;
+}
+
+/* ==========================================================================
+   SERVICES SECTION VIEW MORE BUTTON (Professional Redesign)
+   ========================================================================== */
+.services-more-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+.btn-view-more-services {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(56, 189, 248, 0.15),
+    rgba(56, 189, 248, 0.05)
+  );
+  color: var(--accent-primary, #38bdf8);
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 14px 28px;
+  border-radius: var(--radius-md, 8px);
+  border: 1.5px solid var(--accent-primary, #38bdf8);
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.15);
+  transition: all 0.25s ease;
+}
+
+.btn-view-more-services:hover {
+  background: var(--accent-primary, #38bdf8);
+  color: #0b0f17;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-view-more-services i {
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
+
+.btn-view-more-services:hover i {
+  transform: translateX(4px);
 }
 
 /* ==========================================================================
@@ -466,8 +532,9 @@
   color: #ffffff;
 }
 .twitter-bg {
-  background: rgba(56, 189, 248, 0.12);
-  color: #38bdf8;
+  background: rgba(0, 0, 0, 0.401);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 .email-bg {
   background: rgba(245, 158, 11, 0.12);
@@ -851,11 +918,6 @@
 .reddit-bg {
   background: rgba(255, 69, 0, 0.15);
   color: #ff4500;
-}
-
-.twitter-bg {
-  background: rgba(56, 189, 248, 0.15);
-  color: #38bdf8;
 }
 
 .intel-meta {

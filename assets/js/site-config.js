@@ -260,7 +260,7 @@ function copyEmailAddress(email) {
       .then((data) => {
         // Correctly target up_count inside the nested data object
         const count = data.data?.up_count ?? data.up_count ?? data.count;
-        console.log("Extracted view count:", count);
+        // console.log("Extracted view count:", count);
 
         if (typeof count === "number") {
           const totalViews = BASE_OFFSET + count;
