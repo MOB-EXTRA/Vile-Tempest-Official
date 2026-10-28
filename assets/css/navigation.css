@@ -1,6 +1,9 @@
 /* ==========================================================================
    Professional Sticky Header Styles
    ========================================================================== */
+/* ==========================================================================
+   Professional Sticky Header Styles (Fluid Full-Width)
+   ========================================================================== */
 .site-header {
   position: sticky;
   top: 0;
@@ -16,14 +19,21 @@
 }
 
 .header-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 100%; /* Fluid header container */
   height: 100%;
-  padding: 0 16px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1400px) {
+  .header-container {
+    padding: 0 48px; /* Matches main-content padding on large displays */
+  }
 }
 
 .site-name-link {

@@ -1,10 +1,18 @@
 /* ==========================================================================
-   1. MAIN CONTENT LAYOUT CONTAINER
+   1. FLUID MAIN CONTENT LAYOUT CONTAINER (No fixed max-width limits)
    ========================================================================== */
 .main-content {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 100%; /* Allows full width across large/ultra-wide screens[cite: 32] */
   margin: 0 auto;
-  padding: 40px 24px;
+  padding: 32px 24px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1400px) {
+  .main-content {
+    padding: 40px 48px; /* Roomy padding on large desktop monitors[cite: 32] */
+  }
 }
 
 /* Global Filter Utility Class */
@@ -22,7 +30,7 @@
 }
 
 .videos-section {
-  margin: 24px 0; /* Adds consistent spacing between video sections */
+  margin: 24px 0; /* Adds consistent spacing between video sections[cite: 32] */
 }
 /* ==========================================================================
    2. WELCOME HERO SECTION STYLES
@@ -32,7 +40,18 @@
   flex-direction: column;
   align-items: center;
   gap: 32px;
-  padding: 32px 0;
+  padding: 24px 0 36px;
+  width: 100%;
+}
+
+@media (min-width: 850px) {
+  .welcome-hero {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 48px;
+    padding: 40px 0 52px;
+  }
 }
 
 .hero-content {
@@ -231,18 +250,28 @@
 .services-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 14px;
+  gap: 16px;
+  width: 100%;
 }
 
-@media (min-width: 992px) {
-  .services-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
+/* Mobile landscape / Tablet */
 @media (min-width: 600px) and (max-width: 991px) {
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Standard Desktop: 3 Columns */
+@media (min-width: 992px) and (max-width: 1399px) {
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Ultra-Wide Desktop: 5 Columns across top row[cite: 32] */
+@media (min-width: 1400px) {
+  .services-grid {
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 
@@ -414,7 +443,7 @@
 }
 
 /* ==========================================================================
-   CONTACT & INQUIRIES SECTION (Compact & Space-Saving)
+   CONTACT & INQUIRIES SECTION (Pro Responsive Grid & Compact Email Bars)
    ========================================================================== */
 .contact-section {
   margin: 24px 0;
@@ -426,19 +455,56 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  padding: 20px 16px;
+  padding: 24px 20px;
   box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
-  overflow: hidden; /* Prevents horizontal layout spill */
+  overflow: hidden;
 }
 
 .contact-badge {
   color: var(--accent-primary, #38bdf8);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.contact-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 4px 0 0 0;
+  letter-spacing: -0.4px;
+}
+
+.contact-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 4px 0 0 0;
+  line-height: 1.4;
+}
+
+/* Main Contact Channels Layout: 2 Columns on Desktop */
+.contact-main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+@media (min-width: 850px) {
+  .contact-main-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
 }
 
 .contact-group {
@@ -469,7 +535,7 @@
   box-sizing: border-box;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 500px) and (max-width: 849px) {
   .contact-links-grid,
   .contact-compact-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -490,7 +556,7 @@
   transition: all 0.2s ease;
   box-sizing: border-box;
   width: 100%;
-  min-width: 0; /* Critical to prevent flex content from expanding beyond screen width */
+  min-width: 0;
 }
 
 .contact-link-row:hover,
@@ -504,7 +570,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 0; /* Allows inner text to truncate cleanly */
+  min-width: 0;
   flex: 1;
 }
 
@@ -572,18 +638,38 @@
   flex-shrink: 0;
 }
 
-/* Compact Bottom Email Address Bar */
+/* Bottom Action Bar Container (Side-by-side on wide screens) */
+.contact-actions-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+@media (min-width: 850px) {
+  .contact-actions-wrapper {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+/* Direct Email Compose Button Adjustment */
+.email-compose-card {
+  height: 100%;
+}
+
+/* Compact Bottom Email Address Bar (Mobile-Friendly Stacked & Clean) */
 .contact-footer-bar {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   background: rgba(0, 0, 0, 0.25);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md, 8px);
-  padding: 10px 12px;
+  padding: 12px;
   width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
 }
 
 @media (min-width: 500px) {
@@ -607,10 +693,10 @@
 .contact-footer-action {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-width: 0;
-  width: 100%;
   justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
 }
 
 @media (min-width: 500px) {
@@ -622,24 +708,25 @@
 
 .selectable-email-text {
   font-family: var(--font-mono, monospace);
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   color: var(--accent-primary, #38bdf8);
   user-select: all;
   -webkit-user-select: all;
   text-decoration: none;
-  word-break: break-all; /* Forces long email addresses to wrap on small mobile screens */
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
 }
 
-/* Styling for the Email Copy Button in the Contact Footer Bar */
 .contact-copy-btn {
   background: var(--bg-surface, #0b0f17);
   border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.15));
   color: var(--text-primary, #f1f5f9);
   font-size: 0.75rem;
   font-weight: 600;
-  padding: 4px 10px;
+  padding: 6px 12px;
   border-radius: var(--radius-sm, 6px);
   cursor: pointer;
   display: inline-flex;
@@ -654,10 +741,6 @@
   border-color: var(--accent-primary, #38bdf8);
   color: #0b0f17;
   transform: translateY(-1px);
-}
-
-.contact-copy-btn i {
-  font-size: 0.75rem;
 }
 
 /* ==========================================================================
@@ -1031,5 +1114,74 @@
 
   .hero-title {
     font-size: 42px;
+  }
+}
+
+/* ==========================================================================
+   PERFECT SIDE-BY-SIDE LAYOUT + CLEAN BUTTON FIX FOR FIRST TWO VIDEOS
+   ========================================================================== */
+@media (min-width: 860px) {
+  /* Turn the main content area into a flex container that allows wrapping */
+  main.main-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  /* Force ALL other sections to take up the full width row */
+  main.main-content
+    > *:not(#contact + .videos-section):not(
+      #contact + .videos-section + .videos-section
+    ) {
+    width: 100% !important;
+  }
+
+  /* Force ONLY the first two video sections to sit side-by-side */
+  #contact + .videos-section,
+  #contact + .videos-section + .videos-section {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 48.8% !important;
+    box-sizing: border-box !important;
+    margin-top: 0 !important;
+    margin-bottom: 24px !important;
+    margin-right: 0 !important;
+  }
+
+  /* Fix the internal card layout to stretch fully */
+  #contact + .videos-section .playlist-ad-anchor,
+  #contact + .videos-section .playlist-embed-card,
+  #contact + .videos-section + .videos-section .playlist-ad-anchor,
+  #contact + .videos-section + .videos-section .playlist-embed-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  /* Make meta container flex so descriptions and buttons align properly */
+  #contact + .videos-section .playlist-meta,
+  #contact + .videos-section + .videos-section .playlist-meta {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 18px;
+    flex: 1;
+  }
+
+  #contact + .videos-section .playlist-info,
+  #contact + .videos-section + .videos-section .playlist-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Keep "Watch on YouTube" button clean on a single line */
+  #contact + .videos-section .playlist-link-btn,
+  #contact + .videos-section + .videos-section .playlist-link-btn {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    align-self: center !important;
   }
 }

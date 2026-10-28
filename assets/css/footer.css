@@ -13,11 +13,19 @@
 }
 
 .footer-container {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
   gap: 36px;
+}
+
+@media (min-width: 768px) {
+  .footer-container {
+    grid-template-columns: 2fr 3fr;
+    gap: 48px;
+  }
 }
 
 /* Footer Brand Column */
@@ -182,7 +190,8 @@
 
 /* Bottom Bar / Copyright Info */
 .footer-bottom {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 100%;
   margin: 36px auto 0;
   padding-top: 24px;
   border-top: 1px solid var(--border-subtle, #1e293b);
@@ -192,6 +201,13 @@
   justify-content: space-between;
   gap: 14px;
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .footer-bottom {
+    flex-direction: row;
+    text-align: left;
+  }
 }
 
 .footer-copyright {
@@ -216,17 +232,4 @@
   color: var(--accent-primary, #38bdf8);
   font-size: 0.72rem;
   font-weight: 700;
-}
-
-/* Desktop Multi-column Layout */
-@media (min-width: 768px) {
-  .footer-container {
-    grid-template-columns: 2fr 3fr;
-    gap: 48px;
-  }
-
-  .footer-bottom {
-    flex-direction: row;
-    text-align: left;
-  }
 }
