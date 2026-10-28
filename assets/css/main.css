@@ -1118,7 +1118,7 @@
 }
 
 /* ==========================================================================
-   PERFECT SIDE-BY-SIDE LAYOUT + CLEAN BUTTON FIX FOR FIRST TWO VIDEOS
+   PERFECT SIDE-BY-SIDE LAYOUT + NO HORIZONTAL SCROLL FIX
    ========================================================================== */
 @media (min-width: 860px) {
   /* Turn the main content area into a flex container that allows wrapping */
@@ -1127,22 +1127,27 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
+    max-width: 1400px; /* Constrains max width to prevent ultra-wide overflow */
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
   }
 
-  /* Force ALL other sections to take up the full width row */
+  /* Force ALL other sections to take up the full width row safely */
   main.main-content
     > *:not(#contact + .videos-section):not(
       #contact + .videos-section + .videos-section
     ) {
     width: 100% !important;
+    box-sizing: border-box !important;
   }
 
-  /* Force ONLY the first two video sections to sit side-by-side */
+  /* Force ONLY the first two video sections to sit side-by-side cleanly */
   #contact + .videos-section,
   #contact + .videos-section + .videos-section {
     display: flex !important;
     flex-direction: column !important;
-    width: 48.8% !important;
+    width: 48.5% !important; /* Slightly reduced to account for space-between safely */
     box-sizing: border-box !important;
     margin-top: 0 !important;
     margin-bottom: 24px !important;
@@ -1157,6 +1162,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    box-sizing: border-box;
   }
 
   /* Make meta container flex so descriptions and buttons align properly */
@@ -1169,6 +1175,7 @@
     gap: 16px;
     padding: 16px 18px;
     flex: 1;
+    box-sizing: border-box;
   }
 
   #contact + .videos-section .playlist-info,
