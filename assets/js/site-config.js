@@ -38,8 +38,21 @@ const SITE_CONFIG = {
     twitter: "https://x.com/VileTempestExtr",
   },
 
-  // Versioning and Dynamic Years
-  version: "v2.2.0",
+  // ==========================================================================
+  // Versioning & Dynamic Years Configuration
+  // ==========================================================================
+  // Version Structure Explanation: MAJOR . MINOR . PATCH (Semantic Versioning - SemVer)
+  // - "2" (MAJOR): Indicates a complete platform overhaul or rebuild from scratch.
+  // - "2" (MINOR): Represents feature additions (e.g., adding dynamic filtering, YouTube scroll engine, generalized share handler).
+  // - "1" (PATCH): Represents minor bug fixes, layout tweaks, or text adjustments (e.g., locking legal TOC, CSS fixes).
+  //
+  // Why v2.2.1 is believable for this site:
+  // - Major 2: Site transitioned to modular JavaScript architecture and automated DOM filtering.
+  // - Minor 2: Added full search indexing, dynamic quick ticker bar, and universal share handler.
+  // - Patch 1: Fixed legal page TOC sidebar scrolling bug and text overflow issue.
+  version: "v2.2.1",
+
+  // Base year for automated copyright range calculations (e.g., "2026" or "2026 - 2027")
   startYear: 2026,
 };
 
@@ -127,6 +140,12 @@ function renderDynamicSiteData() {
       "onclick",
       `copyEmailAddress('${SITE_CONFIG.links.emailAddress}')`,
     );
+  });
+
+  // 9. Dynamic Site Version Synchronization
+  const versionElements = document.querySelectorAll(".config-site-version");
+  versionElements.forEach((el) => {
+    el.textContent = SITE_CONFIG.version;
   });
 }
 

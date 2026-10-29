@@ -123,7 +123,7 @@ body {
   letter-spacing: 0.5px;
   white-space: nowrap;
   flex-shrink: 0;
-  display: none; /* Hidden on small mobile screens to prevent header overflow */
+  display: none;
 }
 
 @media (min-width: 480px) {
@@ -150,7 +150,7 @@ body {
 }
 
 /* ==========================================================================
-   Professional Layout: Mobile Stack -> Desktop Grid (Sidebar TOC + Reader)
+   Professional Layout: Mobile Stack -> Desktop Fixed Sidebar + Reader
    ========================================================================== */
 .legal-layout-wrapper {
   display: flex;
@@ -161,19 +161,17 @@ body {
   padding: 80px 16px 40px;
   box-sizing: border-box;
   gap: 24px;
+  position: relative;
 }
 
 @media (min-width: 1024px) {
   .legal-layout-wrapper {
-    display: grid;
-    grid-template-columns: 280px minmax(0, 1fr);
+    display: block; /* Disables standard flow so sidebar can be pinned absolutely/fixed */
     padding: 100px 48px 80px;
-    gap: 48px;
-    align-items: start;
   }
 }
 
-/* Sidebar Table of Contents (Hidden on mobile for clean UX, visible on desktop) */
+/* Sidebar Table of Contents (Permanently Fixed and Motionless on Desktop) */
 .legal-sidebar {
   display: none;
 }
@@ -181,10 +179,14 @@ body {
 @media (min-width: 1024px) {
   .legal-sidebar {
     display: block;
+    position: fixed;
+    top: 95px;
+    left: max(24px, calc((100vw - 1400px) / 2 + 48px));
     width: 280px;
-    position: sticky;
-    top: 100px;
-    align-self: start;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+    box-sizing: border-box;
+    z-index: 10;
   }
 }
 
@@ -244,6 +246,13 @@ body {
   box-sizing: border-box;
 }
 
+@media (min-width: 1024px) {
+  .legal-content {
+    margin-left: 328px; /* Width of sidebar (280px) + exact gap (48px) */
+    width: auto;
+  }
+}
+
 .legal-hero {
   margin-bottom: 4px;
 }
@@ -281,13 +290,13 @@ body {
   box-shadow: var(--shadow-md, 0 4px 20px rgba(0, 0, 0, 0.2));
   width: 100%;
   box-sizing: border-box;
-  scroll-margin-top: 90px;
+  scroll-margin-top: 110px;
 }
 
 @media (min-width: 768px) {
   .legal-card {
     padding: 32px;
-    scroll-margin-top: 100px;
+    scroll-margin-top: 110px;
   }
 }
 
