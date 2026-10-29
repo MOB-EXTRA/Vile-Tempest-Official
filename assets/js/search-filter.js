@@ -2,6 +2,7 @@
  * Vile Tempest Official — Search & Dynamic Filtering Engine
  * Handles live keyword filtering, dynamic filter dropdown, infinite scrolling quick link ticker bar,
  * section visibility, initial DOM order restoration, and navigation scroll handlers.
+ * (Fully Future-Proof: Automatically indexes all main-content elements)
  */
 document.addEventListener("DOMContentLoaded", function () {
   const searchBtn = document.querySelector(".icon-btn[aria-label='Search']");
@@ -21,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="search-input-wrapper">
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" id="site-search-input" placeholder="Search current view (e.g. codm test server)..." autocomplete="off" />
-        <button class="search-close-btn" aria-label="Close Search">&times;</button>
+        <button class="search-close-btn" aria-label="Close Search">×</button>
       </div>
     </div>
   `;
@@ -48,14 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeSearchBtn = searchBarContainer.querySelector(".search-close-btn");
   const filterButtons = document.querySelectorAll(".nav-filter-btn");
 
-  // Store initial pristine HTML card sequence
-  const initialCardOrder = mainContent
-    ? Array.from(
-        mainContent.querySelectorAll(
-          ".welcome-hero, .services-section, .contact-section, .videos-section, .utilities-section, .community-intel-section, .seo-sr-only",
-        ),
-      )
-    : [];
+  // Automatically store initial pristine sequence of ALL elements inside main-content (Future-Proof)
+  const initialCardOrder = mainContent ? Array.from(mainContent.children) : [];
 
   // ==========================================================================
   // DYNAMIC QUICK LINK TICKER BAR (Infinite Leftward Scroll)
@@ -68,15 +63,13 @@ document.addEventListener("DOMContentLoaded", function () {
     tickerBar = document.createElement("div");
     tickerBar.className = "quick-ticker-bar";
 
-    // Explicitly target utility titles, services title, and individual service headings
     const titleElements = document.querySelectorAll(
-      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title",
+      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title, .section-main-title, .category-title",
     );
 
     const extractedTopics = new Set();
     titleElements.forEach((el) => {
       let text = el.textContent.trim().replace(/\|.*$/, "").trim();
-      // Increased character limit to 45 so longer titles like "Project Commissions & Services" fit safely
       if (text.length > 0 && text.length < 45) {
         extractedTopics.add(text);
       }
@@ -139,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
     filterDropdownMenu.className = "filter-dropdown-menu";
 
     const titleElements = document.querySelectorAll(
-      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title",
+      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title, .section-main-title, .category-title",
     );
 
     const extractedTopics = new Set();
@@ -261,12 +254,11 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
-    const allCards = document.querySelectorAll(
-      ".welcome-hero, .services-section, .contact-section, .videos-section, .utilities-section, .community-intel-section, .seo-sr-only",
-    );
-    allCards.forEach((card) => {
-      card.classList.remove("hidden-content");
-    });
+    if (mainContent) {
+      Array.from(mainContent.children).forEach((card) => {
+        card.classList.remove("hidden-content");
+      });
+    }
 
     if (noResultsElem) {
       noResultsElem.classList.add("hidden-content");
@@ -288,31 +280,14 @@ document.addEventListener("DOMContentLoaded", function () {
       ? activeBtn.getAttribute("data-filter")
       : "home";
 
-    const heroSections = document.querySelectorAll(".welcome-hero");
-    const servicesSections = document.querySelectorAll(".services-section");
-    const contactSections = document.querySelectorAll(".contact-section");
-    const videoSections = document.querySelectorAll(".videos-section");
-    const utilitySections = document.querySelectorAll(".utilities-section");
-    const communitySections = document.querySelectorAll(
-      ".community-intel-section",
-    );
+    if (!mainContent) return;
+    const allCards = Array.from(mainContent.children);
 
-    const allCards = [
-      ...heroSections,
-      ...servicesSections,
-      ...contactSections,
-      ...videoSections,
-      ...utilitySections,
-      ...communitySections,
-    ];
-
-    if (mainContent) {
-      initialCardOrder.forEach((card) => {
-        mainContent.appendChild(card);
-      });
-      if (noResultsElem) {
-        mainContent.appendChild(noResultsElem);
-      }
+    initialCardOrder.forEach((card) => {
+      mainContent.appendChild(card);
+    });
+    if (noResultsElem) {
+      mainContent.appendChild(noResultsElem);
     }
 
     allCards.forEach((card) => {
@@ -330,11 +305,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (filterType === "utilities") {
-      heroSections.forEach((el) => el.classList.add("hidden-content"));
-      servicesSections.forEach((el) => el.classList.add("hidden-content"));
-      contactSections.forEach((el) => el.classList.add("hidden-content"));
-      videoSections.forEach((el) => el.classList.add("hidden-content"));
-      communitySections.forEach((el) => el.classList.add("hidden-content"));
+      allCards.forEach((card) => {
+        if (!card.classList.contains("utilities-section")) {
+          card.classList.add("hidden-content");
+        }
+      });
     }
   }
 
@@ -350,11 +325,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (currentScope === "utilities") {
       targetCards = Array.from(document.querySelectorAll(".utilities-section"));
     } else {
-      targetCards = Array.from(
-        document.querySelectorAll(
-          ".welcome-hero, .services-section, .contact-section, .videos-section, .utilities-section, .community-intel-section",
-        ),
-      );
+      targetCards = mainContent ? Array.from(mainContent.children) : [];
     }
 
     if (keywords.length === 0) {
@@ -365,7 +336,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const scoredCards = targetCards.map((card) => {
       const text = card.textContent.toLowerCase();
       const titleElem = card.querySelector(
-        ".utility-title, .playlist-title, .hero-title, .services-title, .contact-title, .intel-item-title",
+        ".utility-title, .playlist-title, .hero-title, .services-title, .contact-title, .intel-item-title, .section-main-title, .category-title",
       );
       const titleText = titleElem ? titleElem.textContent.toLowerCase() : "";
 

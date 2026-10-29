@@ -248,8 +248,9 @@
 
 /* Services Grid - Responsive Layout */
 .services-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 16px;
   width: 100%;
 }
@@ -275,7 +276,10 @@
   }
 }
 
+/* Individual Card Widths for Responsive Breakpoints */
 .service-box {
+  flex: 1 1 100%; /* Mobile: 1 column */
+  max-width: 100%;
   background: var(--bg-subtle, #1e293b);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md, 10px);
@@ -285,6 +289,31 @@
   justify-content: space-between;
   gap: 10px;
   transition: all 0.25s ease;
+  box-sizing: border-box;
+}
+
+/* Tablet (2 Columns) */
+@media (min-width: 600px) and (max-width: 991px) {
+  .service-box {
+    flex: 0 0 calc(50% - 8px);
+    max-width: calc(50% - 8px);
+  }
+}
+
+/* Standard Desktop (3 Columns) */
+@media (min-width: 992px) and (max-width: 1399px) {
+  .service-box {
+    flex: 0 0 calc(33.333% - 11px);
+    max-width: calc(33.333% - 11px);
+  }
+}
+
+/* Ultra-Wide Desktop (3 Columns per row max or custom fit) */
+@media (min-width: 1400px) {
+  .service-box {
+    flex: 0 0 calc(33.333% - 11px);
+    max-width: calc(33.333% - 11px);
+  }
 }
 
 .service-box:hover {
@@ -741,6 +770,44 @@
   border-color: var(--accent-primary, #38bdf8);
   color: #0b0f17;
   transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Content Section Header Banner (Future-proof for MLBB, etc.)
+   ========================================================================== */
+.content-section-header {
+  width: 100%;
+  margin: 100px 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+.section-main-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary, #f8fafc);
+  margin: 0;
+  letter-spacing: -0.4px;
+  border-left: 4px solid var(--accent-primary, #38bdf8);
+  padding-left: 12px;
+}
+
+.section-main-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #94a3b8);
+  margin: 0 0 0 16px;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .section-main-title {
+    font-size: 1.6rem;
+  }
+  .section-main-subtitle {
+    font-size: 0.9rem;
+  }
 }
 
 /* ==========================================================================
