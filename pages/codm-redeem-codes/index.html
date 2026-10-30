@@ -321,6 +321,166 @@
         </section>
 
         <div class="section-divider"></div>
+        <!-- ==========================================================================
+       COMMUNITY REVIEWS SECTION (Redeem Codes Hub Specific)
+       ========================================================================== -->
+        <div class="app-card redeem-reviews-wrapper">
+          <div class="redeem-reviews-header">
+            <span class="redeem-reviews-badge">
+              <i class="fa-solid fa-star"></i> Community Feedback
+            </span>
+            <h2 class="redeem-reviews-title">Redeem Codes Hub Reviews</h2>
+            <p class="redeem-reviews-subtitle">
+              Share your experience or view feedback on the redeem codes
+              service.
+            </p>
+          </div>
+
+          <!-- Play Store Rating Summary Header Card -->
+          <div class="redeem-summary-card">
+            <div class="redeem-score-box">
+              <span id="play-store-avg-score" class="redeem-big-score"
+                >0.0</span
+              >
+              <div id="play-store-avg-stars" class="redeem-stars-row">
+                ★★★★★
+              </div>
+              <span id="play-store-total-reviews" class="redeem-total-count"
+                >0 reviews</span
+              >
+            </div>
+            <div class="redeem-bars-box">
+              <div class="redeem-bar-row">
+                <span>5</span>
+                <div class="redeem-bar-track">
+                  <div
+                    id="bar-5"
+                    class="redeem-bar-fill"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="redeem-bar-row">
+                <span>4</span>
+                <div class="redeem-bar-track">
+                  <div
+                    id="bar-4"
+                    class="redeem-bar-fill"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="redeem-bar-row">
+                <span>3</span>
+                <div class="redeem-bar-track">
+                  <div
+                    id="bar-3"
+                    class="redeem-bar-fill"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="redeem-bar-row">
+                <span>2</span>
+                <div class="redeem-bar-track">
+                  <div
+                    id="bar-2"
+                    class="redeem-bar-fill"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="redeem-bar-row">
+                <span>1</span>
+                <div class="redeem-bar-track">
+                  <div
+                    id="bar-1"
+                    class="redeem-bar-fill"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review Submission Form Card -->
+          <div class="redeem-form-card">
+            <h3 class="redeem-form-heading">Leave Your Feedback</h3>
+
+            <div class="redeem-form-group">
+              <label for="reviewer-name" class="redeem-form-label"
+                >Your Name / IGN (Optional)</label
+              >
+              <input
+                type="text"
+                id="reviewer-name"
+                class="redeem-form-input"
+                placeholder="Anonymous or your handle..."
+              />
+            </div>
+
+            <!-- Hidden Category Selector defaulted to Utilities & CODM Redeem Codes Hub -->
+            <input type="hidden" id="review-type" value="Utilities" />
+            <input
+              type="hidden"
+              id="utility-name"
+              value="CODM Redeem Codes Hub"
+            />
+
+            <div class="redeem-form-group">
+              <label for="review-rating" class="redeem-form-label"
+                >Rating</label
+              >
+              <select id="review-rating" class="redeem-form-select">
+                <option value="5">⭐⭐⭐⭐⭐ (5/5) — Outstanding</option>
+                <option value="4">⭐⭐⭐⭐ (4/5) — Great</option>
+                <option value="3">⭐⭐⭐ (3/5) — Good</option>
+                <option value="2">⭐⭐ (2/5) — Fair</option>
+                <option value="1">⭐ (1/5) — Poor</option>
+              </select>
+            </div>
+
+            <div class="redeem-form-group">
+              <label for="review-comment" class="redeem-form-label"
+                >Your Review / Feedback</label
+              >
+              <textarea
+                id="review-comment"
+                class="redeem-form-textarea"
+                placeholder="Write your thoughts or experience here..."
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="redeem-form-group">
+              <label class="redeem-terms-label">
+                <input type="checkbox" id="review-terms-checkbox" required />
+                <span
+                  >I agree to the
+                  <a href="legal.html" target="_blank" rel="noopener noreferrer"
+                    >Terms & Privacy Policy</a
+                  >.</span
+                >
+              </label>
+            </div>
+
+            <button
+              id="submit-review-btn"
+              type="button"
+              class="redeem-submit-btn"
+            >
+              Submit Review
+            </button>
+          </div>
+
+          <!-- Live Reviews Feed Container -->
+          <div class="redeem-feed-wrapper">
+            <h3 class="redeem-feed-title">Recent Redeem Codes Reviews</h3>
+            <div id="reviews-feed-container" class="redeem-feed-list">
+              <p class="redeem-loading-text">Loading reviews...</p>
+            </div>
+          </div>
+        </div>
 
         <div class="important-note-box" style="margin-bottom: 12px">
           <span class="note-badge">📌 NOTICE ABOUT RECENT CODES</span>
@@ -513,6 +673,7 @@
     </footer>
 
     <script src="../../assets/js/site-config.js"></script>
+    <script type="module" src="assets/js/redeem-reviews.js"></script>
     <script src="assets/js/script.js"></script>
     <script src="../../assets/js/footer-year.js"></script>
   </body>

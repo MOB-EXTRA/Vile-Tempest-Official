@@ -50,4 +50,29 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     { passive: true },
   );
+
+  const reviewBtn = document.getElementById("jump-to-commissions-reviews");
+  if (reviewBtn) {
+    reviewBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      // 1. Smooth scroll to the reviews section
+      const reviewsSection = document.getElementById("reviews-feed-container");
+      if (reviewsSection) {
+        const headerOffset = 80;
+        const elementPosition = reviewsSection.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+      }
+
+      // 2. Automatically activate the "Commissions / Services" filter pill
+      const filterPills = document.querySelectorAll(".play-store-pill");
+      filterPills.forEach((pill) => {
+        if (pill.getAttribute("data-filter") === "Commissions / Services") {
+          pill.click(); // Triggers your existing filter & render logic
+        }
+      });
+    });
+  }
 });

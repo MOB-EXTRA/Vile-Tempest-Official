@@ -426,12 +426,281 @@
               </a>
             </div>
 
-            <!-- View More Services Action Button -->
+            <!-- View More Services & Reviews Action Buttons -->
             <div class="services-more-actions">
               <a href="pages/services/temp.html" class="btn-view-more-services">
                 <span>View More Services</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
+              <a
+                href="#reviews-feed-container"
+                class="btn-view-services-reviews"
+                id="jump-to-commissions-reviews"
+              >
+                <i class="fa-solid fa-star"></i>
+                <span>Client Reviews</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Community Reviews & Feedback Section (Play Store Style) -->
+      <section id="reviews" class="reviews-section">
+        <div class="reviews-container">
+          <!-- Section Header -->
+          <div class="reviews-header">
+            <div class="reviews-badge">
+              <i class="fa-solid fa-star"></i>
+              <span>Community Feedback</span>
+            </div>
+            <h2 class="reviews-main-title">Services & Utility Reviews</h2>
+            <p class="reviews-subtitle">
+              Share your experience or check out feedback from fellow gamers and
+              clients.
+            </p>
+          </div>
+
+          <!-- Two-Column Master Grid Layout Wrapper -->
+          <div class="reviews-content-grid">
+            <!-- Left Column: Rating Summary Card + Feedback Form Stacked -->
+            <div class="reviews-left-column">
+              <!-- Play Store Rating Summary Header Card -->
+              <div class="play-store-summary-card">
+                <div class="play-store-score-box">
+                  <span id="play-store-avg-score" class="play-store-big-rating"
+                    >0.0</span
+                  >
+                  <div id="play-store-avg-stars" class="play-store-stars-row">
+                    ★★★★★
+                  </div>
+                  <span
+                    id="play-store-total-reviews"
+                    class="play-store-total-count"
+                    >0 reviews</span
+                  >
+                </div>
+                <div class="play-store-bars-box">
+                  <div class="play-store-bar-row">
+                    <span>5</span>
+                    <div class="play-store-bar-track">
+                      <div
+                        id="bar-5"
+                        class="play-store-bar-fill"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="play-store-bar-row">
+                    <span>4</span>
+                    <div class="play-store-bar-track">
+                      <div
+                        id="bar-4"
+                        class="play-store-bar-fill"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="play-store-bar-row">
+                    <span>3</span>
+                    <div class="play-store-bar-track">
+                      <div
+                        id="bar-3"
+                        class="play-store-bar-fill"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="play-store-bar-row">
+                    <span>2</span>
+                    <div class="play-store-bar-track">
+                      <div
+                        id="bar-2"
+                        class="play-store-bar-fill"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="play-store-bar-row">
+                    <span>1</span>
+                    <div class="play-store-bar-track">
+                      <div
+                        id="bar-1"
+                        class="play-store-bar-fill"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Review Submission Form Card -->
+              <div class="review-form-card">
+                <h3 class="review-card-heading">Leave Your Feedback</h3>
+
+                <!-- Input 1: Name (Optional) -->
+                <div class="form-group">
+                  <label for="reviewer-name" class="form-label"
+                    >Your Name / IGN (Optional)</label
+                  >
+                  <input
+                    type="text"
+                    id="reviewer-name"
+                    class="form-input name-input-field"
+                    placeholder="Anonymous or your handle..."
+                  />
+                </div>
+
+                <!-- Input 2: Type (Select) -->
+                <div class="form-group">
+                  <label for="review-type" class="form-label"
+                    >Category<span
+                      >(Services, Buying in Shop, Utilities/Gaming Tools)</span
+                    ></label
+                  >
+                  <select id="review-type" class="form-select">
+                    <option value="General Feedback">General Feedback</option>
+                    <option value="Commissions / Services">
+                      Commissions / Services
+                    </option>
+                    <option value="Buying in Shop">Buying in Shop</option>
+                    <option value="Utilities">Utilities</option>
+                  </select>
+                </div>
+
+                <!-- Conditional Input: Specific Utility -->
+                <div
+                  id="utility-conditional-wrapper"
+                  class="form-group utility-wrapper-hidden"
+                >
+                  <label
+                    for="utility-name"
+                    class="form-label utility-label-highlight"
+                    >Which utility tool are you reviewing?</label
+                  >
+                  <select
+                    id="utility-name"
+                    class="form-select utility-select-accent"
+                  >
+                    <option value="CODM PTB Download Links">
+                      CODM PTB Download Links
+                    </option>
+                    <option value="CODM IGN Formatter">
+                      CODM IGN Formatter
+                    </option>
+                    <option value="CODM Redeem Codes Hub">
+                      CODM Redeem Codes Hub
+                    </option>
+                    <option value="Other Utility Tool">
+                      Other Utility Tool
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Input 3: Rating (1-5 Star) -->
+                <div class="form-group">
+                  <label for="review-rating" class="form-label">Rating</label>
+                  <select id="review-rating" class="form-select">
+                    <option value="5">⭐⭐⭐⭐⭐ (5/5) — Outstanding</option>
+                    <option value="4">⭐⭐⭐⭐ (4/5) — Great</option>
+                    <option value="3">⭐⭐⭐ (3/5) — Good</option>
+                    <option value="2">⭐⭐ (2/5) — Fair</option>
+                    <option value="1">⭐ (1/5) — Poor</option>
+                  </select>
+                </div>
+
+                <!-- Input 4: Review Paragraph -->
+                <div class="form-group">
+                  <label for="review-comment" class="form-label"
+                    >Your Review / Feedback</label
+                  >
+                  <textarea
+                    id="review-comment"
+                    class="form-textarea"
+                    placeholder="Write your thoughts or experience here..."
+                    rows="3"
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="form-spacer"></div>
+
+                <!-- Terms & Privacy Agreement Checkbox Group -->
+                <div class="form-group review-terms-group">
+                  <label class="review-terms-label">
+                    <input
+                      type="checkbox"
+                      id="review-terms-checkbox"
+                      required
+                    />
+                    <span
+                      >I agree to the
+                      <a
+                        href="legal.html"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Terms & Privacy Policy</a
+                      >.</span
+                    >
+                  </label>
+                </div>
+
+                <button
+                  id="submit-review-btn"
+                  type="button"
+                  class="btn-submit-review"
+                >
+                  Submit Review
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Column: Live Reviews Feed Container -->
+            <div class="reviews-feed-wrapper">
+              <h3 class="reviews-feed-title">Recent Reviews</h3>
+
+              <!-- Play Store Filter Pills Bar -->
+              <div class="play-store-filter-bar">
+                <button
+                  type="button"
+                  class="play-store-pill active"
+                  data-filter="all"
+                >
+                  All
+                </button>
+                <button
+                  type="button"
+                  class="play-store-pill"
+                  data-filter="General Feedback"
+                >
+                  General
+                </button>
+                <button
+                  type="button"
+                  class="play-store-pill"
+                  data-filter="Commissions / Services"
+                >
+                  Services
+                </button>
+                <button
+                  type="button"
+                  class="play-store-pill"
+                  data-filter="Utilities"
+                >
+                  Utilities
+                </button>
+                <button
+                  type="button"
+                  class="play-store-pill"
+                  data-filter="Buying in Shop"
+                >
+                  Shop
+                </button>
+              </div>
+
+              <div id="reviews-feed-container" class="reviews-feed-list">
+                <p class="reviews-loading-text">Loading community reviews...</p>
+              </div>
             </div>
           </div>
         </div>
@@ -1071,6 +1340,16 @@
         </a>
 
         <a
+          href="#reviews"
+          class="nav-item nav-filter-btn"
+          data-filter="reviews"
+          aria-label="Reviews"
+        >
+          <i class="fa-solid fa-star"></i>
+          <span>Reviews</span>
+        </a>
+
+        <a
           href="https://www.youtube.com/channel/UCbDtYZS08VvB6luAcyn08bQ/community"
           class="nav-item config-link-yt"
           aria-label="Community"
@@ -1078,7 +1357,7 @@
           rel="noopener noreferrer"
         >
           <i class="fa-solid fa-users"></i>
-          <span>Community</span>
+          <span>Talk</span>
         </a>
 
         <a href="legal.html" class="nav-item" aria-label="Terms & Privacy">
@@ -1209,5 +1488,7 @@
     <script src="assets/js/script.js"></script>
     <script src="assets/js/search-filter.js"></script>
     <script src="assets/js/share-handler.js"></script>
+
+    <script type="module" src="assets/js/reviews.js"></script>
   </body>
 </html>

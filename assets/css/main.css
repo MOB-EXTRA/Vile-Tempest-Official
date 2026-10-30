@@ -1,9 +1,9 @@
 /* ==========================================================================
-   1. FLUID MAIN CONTENT LAYOUT CONTAINER (No fixed max-width limits)
+   1. FLUID MAIN CONTENT LAYOUT CONTAINER
    ========================================================================== */
 .main-content {
   width: 100%;
-  max-width: 100%; /* Allows full width across large/ultra-wide screens[cite: 32] */
+  max-width: 100%;
   margin: 0 auto;
   padding: 32px 24px;
   box-sizing: border-box;
@@ -11,7 +11,7 @@
 
 @media (min-width: 1400px) {
   .main-content {
-    padding: 40px 48px; /* Roomy padding on large desktop monitors[cite: 32] */
+    padding: 40px 48px;
   }
 }
 
@@ -20,7 +20,7 @@
   display: none !important;
 }
 
-/* Ensure smooth scroll leaves clearance for the fixed header & adds proper vertical spacing */
+/* Smooth scroll clearance for fixed header */
 .services-section,
 .contact-section,
 .utilities-section,
@@ -30,8 +30,9 @@
 }
 
 .videos-section {
-  margin: 24px 0; /* Adds consistent spacing between video sections[cite: 32] */
+  margin: 24px 0;
 }
+
 /* ==========================================================================
    2. WELCOME HERO SECTION STYLES
    ========================================================================== */
@@ -195,7 +196,7 @@
 }
 
 /* ==========================================================================
-   PROFESSIONAL SERVICES SECTION STYLES (Compact & Side-by-Side Header Layout)
+   3. PROFESSIONAL SERVICES SECTION STYLES
    ========================================================================== */
 .services-section {
   margin: 24px 0;
@@ -246,7 +247,6 @@
   line-height: 1.4;
 }
 
-/* Services Grid - Responsive Layout */
 .services-grid {
   display: flex;
   flex-wrap: wrap;
@@ -255,30 +255,27 @@
   width: 100%;
 }
 
-/* Mobile landscape / Tablet */
 @media (min-width: 600px) and (max-width: 991px) {
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Standard Desktop: 3 Columns */
-@media (min-width: 992px) and (max-width: 1399px) {
-  .services-grid {
-    grid-template-columns: repeat(3, 1fr);
+/* 1. Ensure grid stretches columns equally on desktop */
+@media (min-width: 992px) {
+  .reviews-content-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  /* Left column form locked to a fixed height to align with the right side */
+  .review-form-card {
+    height: 380px;
   }
 }
 
-/* Ultra-Wide Desktop: 5 Columns across top row[cite: 32] */
-@media (min-width: 1400px) {
-  .services-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
-/* Individual Card Widths for Responsive Breakpoints */
 .service-box {
-  flex: 1 1 100%; /* Mobile: 1 column */
+  flex: 1 1 100%;
   max-width: 100%;
   background: var(--bg-subtle, #1e293b);
   border: 1px solid var(--border-subtle);
@@ -292,7 +289,6 @@
   box-sizing: border-box;
 }
 
-/* Tablet (2 Columns) */
 @media (min-width: 600px) and (max-width: 991px) {
   .service-box {
     flex: 0 0 calc(50% - 8px);
@@ -300,7 +296,6 @@
   }
 }
 
-/* Standard Desktop (3 Columns) */
 @media (min-width: 992px) and (max-width: 1399px) {
   .service-box {
     flex: 0 0 calc(33.333% - 11px);
@@ -308,7 +303,6 @@
   }
 }
 
-/* Ultra-Wide Desktop (3 Columns per row max or custom fit) */
 @media (min-width: 1400px) {
   .service-box {
     flex: 0 0 calc(33.333% - 11px);
@@ -322,7 +316,6 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Side-by-Side Header Layout (Icon + Title) */
 .service-header-row {
   display: flex;
   align-items: center;
@@ -348,7 +341,6 @@
   line-height: 1.25;
 }
 
-/* Glow Variants for Service Icons */
 .web-dev-glow {
   background: rgba(56, 189, 248, 0.12);
   color: #38bdf8;
@@ -422,14 +414,13 @@
   text-decoration: underline;
 }
 
-/* ==========================================================================
-   SERVICES SECTION VIEW MORE BUTTON (Professional Redesign)
-   ========================================================================== */
 .services-more-actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  gap: 12px;
+  margin-top: 14px;
   width: 100%;
   grid-column: 1 / -1;
 }
@@ -471,8 +462,36 @@
   transform: translateX(4px);
 }
 
+.btn-view-services-reviews {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(30, 41, 59, 0.6);
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 14px 28px;
+  border-radius: var(--radius-md, 8px);
+  border: 1.5px solid #334155;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-view-services-reviews:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-primary, #38bdf8);
+  color: var(--accent-primary, #38bdf8);
+  transform: translateY(-2px);
+}
+
+.btn-view-services-reviews i {
+  color: #facc15;
+  font-size: 0.85rem;
+}
+
 /* ==========================================================================
-   CONTACT & INQUIRIES SECTION (Pro Responsive Grid & Compact Email Bars)
+   4. CONTACT & INQUIRIES SECTION
    ========================================================================== */
 .contact-section {
   margin: 24px 0;
@@ -521,7 +540,6 @@
   line-height: 1.4;
 }
 
-/* Main Contact Channels Layout: 2 Columns on Desktop */
 .contact-main-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -667,7 +685,6 @@
   flex-shrink: 0;
 }
 
-/* Bottom Action Bar Container (Side-by-side on wide screens) */
 .contact-actions-wrapper {
   display: grid;
   grid-template-columns: 1fr;
@@ -683,12 +700,10 @@
   }
 }
 
-/* Direct Email Compose Button Adjustment */
 .email-compose-card {
   height: 100%;
 }
 
-/* Compact Bottom Email Address Bar (Mobile-Friendly Stacked & Clean) */
 .contact-footer-bar {
   display: flex;
   flex-direction: column;
@@ -773,7 +788,7 @@
 }
 
 /* ==========================================================================
-   Content Section Header Banner (Future-proof for MLBB, etc.)
+   5. CONTENT SECTION HEADER BANNER
    ========================================================================== */
 .content-section-header {
   width: 100%;
@@ -811,7 +826,7 @@
 }
 
 /* ==========================================================================
-   3. MODULAR UTILITY CARD COMPONENT (PTB Links, Tools, Codes)
+   6. MODULAR UTILITY CARD COMPONENT
    ========================================================================== */
 .utilities-section {
   margin: 32px 0;
@@ -961,7 +976,7 @@
 }
 
 /* ==========================================================================
-   COMMUNITY INTEL HUB (Professional Compact Layout)
+   7. COMMUNITY INTEL HUB
    ========================================================================== */
 .community-intel-section {
   margin: 20px 0;
@@ -1011,7 +1026,6 @@
   line-height: 1.35;
 }
 
-/* 2-Column Responsive Grid */
 .community-intel-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1024,7 +1038,6 @@
   }
 }
 
-/* Individual Card Styling */
 .intel-item-card {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1131,7 +1144,6 @@
   line-height: 1.35;
 }
 
-/* Action Buttons */
 .btn-intel-action {
   display: inline-flex;
   align-items: center;
@@ -1168,7 +1180,7 @@
 }
 
 /* ==========================================================================
-   6. RESPONSIVE BREAKPOINTS
+   8. RESPONSIVE BREAKPOINTS & DESKTOP SIDE-BY-SIDE VIDEO CARDS
    ========================================================================== */
 @media (min-width: 768px) {
   .welcome-hero {
@@ -1184,23 +1196,18 @@
   }
 }
 
-/* ==========================================================================
-   PERFECT SIDE-BY-SIDE LAYOUT + NO HORIZONTAL SCROLL FIX
-   ========================================================================== */
 @media (min-width: 860px) {
-  /* Turn the main content area into a flex container that allows wrapping */
   main.main-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
-    max-width: 1400px; /* Constrains max width to prevent ultra-wide overflow */
+    max-width: 1400px;
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
   }
 
-  /* Force ALL other sections to take up the full width row safely */
   main.main-content
     > *:not(#contact + .videos-section):not(
       #contact + .videos-section + .videos-section
@@ -1209,19 +1216,17 @@
     box-sizing: border-box !important;
   }
 
-  /* Force ONLY the first two video sections to sit side-by-side cleanly */
   #contact + .videos-section,
   #contact + .videos-section + .videos-section {
     display: flex !important;
     flex-direction: column !important;
-    width: 48.5% !important; /* Slightly reduced to account for space-between safely */
+    width: 48.5% !important;
     box-sizing: border-box !important;
     margin-top: 0 !important;
     margin-bottom: 24px !important;
     margin-right: 0 !important;
   }
 
-  /* Fix the internal card layout to stretch fully */
   #contact + .videos-section .playlist-ad-anchor,
   #contact + .videos-section .playlist-embed-card,
   #contact + .videos-section + .videos-section .playlist-ad-anchor,
@@ -1232,7 +1237,6 @@
     box-sizing: border-box;
   }
 
-  /* Make meta container flex so descriptions and buttons align properly */
   #contact + .videos-section .playlist-meta,
   #contact + .videos-section + .videos-section .playlist-meta {
     display: flex;
@@ -1251,11 +1255,672 @@
     min-width: 0;
   }
 
-  /* Keep "Watch on YouTube" button clean on a single line */
   #contact + .videos-section .playlist-link-btn,
   #contact + .videos-section + .videos-section .playlist-link-btn {
     white-space: nowrap !important;
     flex-shrink: 0 !important;
     align-self: center !important;
   }
+}
+
+/* ==========================================================================
+   COMMUNITY REVIEWS & FEEDBACK SECTION (Play Store Style)
+   ========================================================================== */
+.reviews-section {
+  padding: 32px 0px 32px 0px;
+  /* background-color: var(--bg-secondary, #0f172a); */
+  border-top: 1px solid rgba(56, 189, 248, 0.1);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+  border-left: none;
+  border-right: none;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.reviews-container {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  /* padding: 0 12px; */
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .reviews-container {
+    padding: 0 20px;
+  }
+}
+
+.reviews-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.reviews-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--accent-primary, #38bdf8);
+  padding: 4px 10px;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.reviews-main-title {
+  color: #f1f5f9;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.4px;
+}
+
+@media (min-width: 768px) {
+  .reviews-main-title {
+    font-size: 1.8rem;
+  }
+}
+
+.reviews-subtitle {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Master Two-Column Layout Grid */
+.reviews-content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 992px) {
+  .reviews-content-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+}
+
+/* Left Column Container - Increased height */
+.reviews-left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Play Store Rating Summary Header Card */
+.play-store-summary-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: var(--radius-lg, 10px);
+  padding: 18px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .play-store-summary-card {
+    padding: 24px;
+    gap: 20px;
+  }
+}
+
+.play-store-score-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 90px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .play-store-score-box {
+    min-width: 140px;
+  }
+}
+
+.play-store-big-rating {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+@media (min-width: 768px) {
+  .play-store-big-rating {
+    font-size: 3rem;
+    margin-bottom: 6px;
+  }
+}
+
+.play-store-stars-row {
+  color: #facc15;
+  font-size: 11px;
+  letter-spacing: 1px;
+  margin-bottom: 3px;
+}
+
+@media (min-width: 768px) {
+  .play-store-stars-row {
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+}
+
+.play-store-total-count {
+  color: #94a3b8;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .play-store-total-count {
+    font-size: 12px;
+  }
+}
+
+/* Star Breakdown Progress Bars */
+.play-store-bars-box {
+  flex: 1;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .play-store-bars-box {
+    max-width: 400px;
+    gap: 6px;
+  }
+}
+
+.play-store-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #94a3b8;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .play-store-bar-row {
+    gap: 10px;
+    font-size: 12px;
+  }
+}
+
+.play-store-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .play-store-bar-track {
+    height: 8px;
+  }
+}
+
+.play-store-bar-fill {
+  height: 100%;
+  background: #38bdf8;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* Review Submission Form Card */
+.review-form-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  padding: 18px;
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .review-form-card {
+    padding: 24px;
+  }
+}
+
+.review-card-heading {
+  color: #f1f5f9;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+}
+
+.form-group {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.form-label {
+  color: #94a3b8;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+
+  span {
+    margin-left: 4px;
+    font-size: 9px;
+  }
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  background: #0b0f17;
+  border: 1px solid #334155;
+  color: #fff;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 13px;
+  width: 100%;
+  outline: none;
+  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--accent-primary, #38bdf8);
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 110px; /* Taller textarea input box */
+  flex: 1;
+}
+
+.form-spacer {
+  display: none;
+}
+
+.utility-wrapper-hidden {
+  display: none;
+}
+
+.utility-label-highlight {
+  color: #38bdf8 !important;
+  font-weight: 700;
+}
+
+.utility-select-accent {
+  border-color: #38bdf8 !important;
+}
+
+.review-terms-group {
+  margin-top: 6px;
+  margin-bottom: 4px;
+}
+
+.review-terms-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--text-secondary, #94a3b8);
+  cursor: pointer;
+  user-select: none;
+}
+
+.review-terms-label input[type="checkbox"] {
+  accent-color: var(--accent-primary, #38bdf8);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.review-terms-label a {
+  color: var(--accent-primary, #38bdf8);
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
+}
+
+.review-terms-label a:hover {
+  opacity: 0.8;
+}
+
+.btn-submit-review {
+  background: var(--accent-primary, #38bdf8);
+  color: #0b0f17;
+  border: none;
+  padding: 12px 18px; /* Slightly taller button */
+  border-radius: var(--radius-sm, 6px);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  margin-top: 14px;
+  flex-shrink: 0;
+}
+
+.btn-submit-review:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-submitting {
+  opacity: 0.6;
+}
+
+/* Right Column Wrapper - Increased height */
+.reviews-feed-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 720px;
+}
+
+.reviews-feed-title {
+  color: #f1f5f9;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* Play Store Filter Pills Bar */
+.play-store-filter-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  flex-shrink: 0;
+}
+
+.play-store-filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.play-store-pill {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid #334155;
+  color: #94a3b8;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--radius-full, 9999px);
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .play-store-pill {
+    font-size: 12px;
+    padding: 6px 14px;
+  }
+}
+
+.play-store-pill:hover,
+.play-store-pill.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+/* Scrollable Feed List with Top and Bottom Fade Effect */
+.reviews-feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  background: rgba(15, 23, 42, 0.2);
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+
+  /* Smooth top & bottom fade mask */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20px,
+    black calc(100% - 20px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20px,
+    black calc(100% - 20px),
+    transparent 100%
+  );
+}
+
+.reviews-feed-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.reviews-feed-list::-webkit-scrollbar-track {
+  background: rgba(11, 15, 23, 0.5);
+  border-radius: 4px;
+}
+
+.reviews-feed-list::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.3);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.reviews-feed-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.6);
+}
+
+.reviews-feed-list {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.3) rgba(11, 15, 23, 0.5);
+}
+
+.reviews-loading-text {
+  color: #94a3b8;
+  font-style: italic;
+  font-size: 13px;
+  margin: auto;
+  text-align: center;
+}
+
+.reviews-error-text {
+  color: #e74c3c;
+  font-size: 13.5px;
+  text-align: center;
+  margin: auto;
+}
+
+/* Individual Review Item Card Styling */
+.review-item-card {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid #334155;
+  padding: 10px 12px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.review-card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.review-author-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.review-author-name {
+  color: #f1f5f9;
+  font-size: 0.88rem;
+}
+
+.review-category-badge {
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.review-stars-display {
+  color: #facc15;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.review-comment-body {
+  color: #cbd5e1;
+  font-size: 13px;
+  line-height: 1.35;
+  margin: 0;
+  word-break: break-word;
+}
+
+/* Play Store "Your Review" Panel Styles */
+#user-device-review-panel {
+  margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.user-review-status-box {
+  background: rgba(56, 189, 248, 0.08);
+  border: 1.5px solid rgba(56, 189, 248, 0.4);
+  border-radius: var(--radius-lg, 10px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.1);
+}
+
+.user-review-status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--accent-primary, #38bdf8);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.btn-edit-my-review {
+  background: var(--accent-primary, #38bdf8);
+  color: #0b0f17;
+  border: none;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn-edit-my-review:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.user-review-preview-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-review-preview-content strong {
+  color: #f1f5f9;
+  font-size: 0.9rem;
+}
+
+.user-review-stars {
+  color: #facc15;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.user-review-preview-content p {
+  color: #cbd5e1;
+  font-size: 12.5px;
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* Highlight badge inside feed for current user's review */
+.your-review-pill {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.my-device-review-highlight {
+  border-color: rgba(56, 189, 248, 0.5) !important;
+  background: rgba(56, 189, 248, 0.05) !important;
 }

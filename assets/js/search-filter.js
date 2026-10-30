@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
     tickerBar.className = "quick-ticker-bar";
 
     const titleElements = document.querySelectorAll(
-      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title, .section-main-title, .category-title",
+      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title, .section-main-title, .category-title, .reviews-main-title, .reviews-feed-title",
     );
 
     const extractedTopics = new Set();
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
     filterDropdownMenu.className = "filter-dropdown-menu";
 
     const titleElements = document.querySelectorAll(
-      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title, .section-main-title, .category-title",
+      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title, .section-main-title, .category-title, .reviews-main-title, .reviews-feed-title",
     );
 
     const extractedTopics = new Set();
@@ -310,6 +310,12 @@ document.addEventListener("DOMContentLoaded", function () {
           card.classList.add("hidden-content");
         }
       });
+    } else if (filterType === "reviews") {
+      allCards.forEach((card) => {
+        if (!card.classList.contains("reviews-section")) {
+          card.classList.add("hidden-content");
+        }
+      });
     }
   }
 
@@ -414,6 +420,18 @@ document.addEventListener("DOMContentLoaded", function () {
       resetPageToOriginalState();
     }
 
+    // Append ID to URL bar without reloading the page
+    if (history.pushState) {
+      const newUrl =
+        window.location.protocol +
+        "//" +
+        window.location.host +
+        window.location.pathname +
+        "#" +
+        targetId;
+      history.pushState({ path: newUrl }, "", newUrl);
+    }
+
     setTimeout(() => {
       const targetElem = document.getElementById(targetId);
       if (targetElem) {
@@ -493,6 +511,18 @@ document.addEventListener("DOMContentLoaded", function () {
         resetPageToOriginalState();
       } else {
         applyCurrentViewFilter();
+
+        // Push hash fragment to URL bar (e.g. #reviews, #utilities)
+        if (history.pushState) {
+          const newUrl =
+            window.location.protocol +
+            "//" +
+            window.location.host +
+            window.location.pathname +
+            "#" +
+            targetFilter;
+          history.pushState({ path: newUrl }, "", newUrl);
+        }
       }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -506,5 +536,20 @@ document.addEventListener("DOMContentLoaded", function () {
     openSearch();
     if (searchInput) searchInput.value = sharedQuery;
     executeSearch(sharedQuery);
+  }
+
+  // Handle shared URL hash fragments on initial page load (e.g., #reviews, #services, #contact)
+  if (window.location.hash) {
+    const targetId = window.location.hash.substring(1);
+    setTimeout(() => {
+      const targetElem = document.getElementById(targetId);
+      if (targetElem) {
+        const headerOffset = 90;
+        const elementPosition = targetElem.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+      }
+    }, 300); // 300ms delay ensures DOM elements and dynamic feeds are fully rendered
   }
 });

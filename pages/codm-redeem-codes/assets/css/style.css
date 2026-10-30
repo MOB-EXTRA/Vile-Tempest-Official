@@ -722,3 +722,255 @@ body {
 .dot {
   margin: 0 6px;
 }
+
+/* =================================================================
+   10. REDEEM CODES HUB REVIEWS & PLAY STORE WIDGET STYLES
+   ================================================================ */
+.redeem-reviews-wrapper {
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+
+.redeem-reviews-header {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.redeem-reviews-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--accent-cyan);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  margin-bottom: 6px;
+}
+
+.redeem-reviews-title {
+  color: var(--text-primary);
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.redeem-reviews-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+/* Play Store Summary Card */
+.redeem-summary-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.redeem-score-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 85px;
+}
+
+.redeem-big-score {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.redeem-stars-row {
+  color: #facc15;
+  font-size: 0.68rem;
+  letter-spacing: 1px;
+  margin: 2px 0;
+}
+
+.redeem-total-count {
+  color: var(--text-secondary);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.redeem-bars-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.redeem-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+}
+
+.redeem-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.redeem-bar-fill {
+  height: 100%;
+  background: var(--accent-cyan);
+  width: 0%;
+}
+
+/* Review Form Styling */
+.redeem-form-card {
+  margin-bottom: 14px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  padding: 14px;
+  border-radius: 10px;
+}
+
+.redeem-form-heading {
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.redeem-form-group {
+  margin-bottom: 10px;
+}
+
+.redeem-form-label {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.redeem-form-input,
+.redeem-form-select,
+.redeem-form-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  outline: none;
+}
+
+.redeem-form-textarea {
+  resize: vertical;
+}
+
+.redeem-terms-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.redeem-terms-label input {
+  accent-color: var(--accent-cyan);
+  width: 13px;
+  height: 13px;
+}
+
+.redeem-terms-label a {
+  color: var(--accent-cyan);
+  text-decoration: underline;
+}
+
+.redeem-submit-btn {
+  width: 100%;
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+  border: none;
+  padding: 9px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.redeem-submit-btn:hover {
+  opacity: 0.9;
+}
+
+/* Feed Styling */
+.redeem-feed-title {
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.redeem-feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.redeem-review-item {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.redeem-review-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.redeem-review-author {
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.redeem-review-stars {
+  color: #facc15;
+  font-size: 0.65rem;
+}
+
+.redeem-review-comment {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  margin: 0;
+  word-break: break-word;
+}
+
+.redeem-loading-text {
+  color: var(--text-secondary);
+  font-style: italic;
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 10px 0;
+}
