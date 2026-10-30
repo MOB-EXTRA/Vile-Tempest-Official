@@ -1,4 +1,4 @@
-import { db } from "../../../../assets/js/reviews.js";
+import { db } from "../../../../assets/js/firebase-config.js";
 import {
   collection,
   addDoc,
@@ -23,85 +23,100 @@ if (!deviceToken) {
 
 let isEditingMode = false;
 let editingDocId = null;
+let isSubmittingLock = false; // Hard execution lock to stop double triggers
 
-document.addEventListener("DOMContentLoaded", () => {
-  const submitBtn = document.getElementById("submit-review-btn");
-  if (submitBtn) {
-    submitBtn.addEventListener("click", submitUserReview);
-  }
+// Initialize once globally per session lifecycle
+if (!window.__redeemHubScriptLoaded) {
+  window.__redeemHubScriptLoaded = true;
 
-  initRealtimeReviewsFeed();
-});
+  document.addEventListener("DOMContentLoaded", () => {
+    const submitBtn = document.getElementById("submit-review-btn");
+    if (submitBtn && !submitBtn.dataset.bound) {
+      submitBtn.dataset.bound = "true";
+      submitBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        submitUserReview();
+      });
+    }
+
+    initRealtimeReviewsFeed();
+  });
+}
 
 async function submitUserReview() {
-  const nameInput = document.getElementById("reviewer-name");
-  const typeSelect = document.getElementById("review-type");
-  const utilitySelect = document.getElementById("utility-name");
-  const ratingSelect = document.getElementById("review-rating");
-  const commentInput = document.getElementById("review-comment");
-  const termsCheckbox = document.getElementById("review-terms-checkbox");
-
-  const enteredName = nameInput.value.trim();
-  const reviewType = typeSelect ? typeSelect.value : "Utilities";
-  const specificUtility = utilitySelect
-    ? utilitySelect.value
-    : "CODM Redeem Codes Hub";
-  const rating = parseInt(ratingSelect.value);
-  const comment = commentInput.value.trim();
-
-  if (termsCheckbox && !termsCheckbox.checked) {
-    alert(
-      "You must agree to the Terms & Privacy Policy before submitting your review.",
-    );
-    return;
-  }
-
-  if (!comment) {
-    alert("Please write a review comment before submitting.");
-    return;
-  }
-
-  // Check unique token matching for this specific hub only
-  if (!isEditingMode) {
-    const existingDeviceReview = cachedReviews.find(
-      (r) =>
-        r.deviceToken === deviceToken &&
-        r.specificUtility === "CODM Redeem Codes Hub",
-    );
-    if (existingDeviceReview) {
-      alert(
-        "This device has already submitted a review for the Redeem Codes Hub. You can edit your existing review using the panel below.",
-      );
-      return;
-    }
-  }
-
-  let finalAuthor = "";
-  if (enteredName) {
-    const nameExists = cachedReviews.some(
-      (r) =>
-        r.author &&
-        r.author.toLowerCase() === enteredName.toLowerCase() &&
-        (!isEditingMode || r.id !== editingDocId),
-    );
-
-    if (nameExists) {
-      alert(
-        `The handle "${enteredName}" is already taken by another reviewer. Please choose a different name.`,
-      );
-      nameInput.focus();
-      return;
-    }
-    finalAuthor = enteredName;
-  } else {
-    finalAuthor = generateUniqueAnonymousTag();
-  }
+  if (isSubmittingLock) return; // Prevent concurrent execution instantly
+  isSubmittingLock = true;
 
   try {
+    const nameInput = document.getElementById("reviewer-name");
+    const typeSelect = document.getElementById("review-type");
+    const utilitySelect = document.getElementById("utility-name");
+    const ratingSelect = document.getElementById("review-rating");
+    const commentInput = document.getElementById("review-comment");
+    const termsCheckbox = document.getElementById("review-terms-checkbox");
+
+    const enteredName = nameInput.value.trim();
+    const reviewType = typeSelect ? typeSelect.value : "Utilities";
+    const specificUtility = utilitySelect
+      ? utilitySelect.value
+      : "CODM Redeem Codes Hub";
+    const rating = parseInt(ratingSelect.value);
+    const comment = commentInput.value.trim();
+
+    if (termsCheckbox && !termsCheckbox.checked) {
+      alert(
+        "You must agree to the Terms & Privacy Policy before submitting your review.",
+      );
+      return;
+    }
+
+    if (!comment) {
+      alert("Please write a review comment before submitting.");
+      return;
+    }
+
+    // Filter cached reviews specifically for this tool hub only
+    const redeemReviews = cachedReviews.filter(
+      (r) => r.specificUtility === "CODM Redeem Codes Hub",
+    );
+
+    if (!isEditingMode) {
+      const existingDeviceReview = redeemReviews.find(
+        (r) => r.deviceToken === deviceToken,
+      );
+      if (existingDeviceReview) {
+        alert(
+          "This device has already submitted a review for the Redeem Codes Hub. You can edit your existing review using the panel below.",
+        );
+        return;
+      }
+    }
+
+    let finalAuthor = "";
+    if (enteredName) {
+      const nameExists = redeemReviews.some(
+        (r) =>
+          r.author &&
+          r.author.toLowerCase() === enteredName.toLowerCase() &&
+          (!isEditingMode || r.id !== editingDocId),
+      );
+
+      if (nameExists) {
+        alert(
+          `The handle "${enteredName}" is already taken by another reviewer. Please choose a different name.`,
+        );
+        nameInput.focus();
+        return;
+      }
+      finalAuthor = enteredName;
+    } else {
+      finalAuthor = generateUniqueAnonymousTag(redeemReviews);
+    }
+
     toggleSubmitState(true, isEditingMode);
 
     if (isEditingMode && editingDocId) {
-      const myReview = cachedReviews.find((r) => r.id === editingDocId);
+      const myReview = redeemReviews.find((r) => r.id === editingDocId);
       const hasNoChanges =
         myReview &&
         myReview.author === finalAuthor &&
@@ -112,8 +127,7 @@ async function submitUserReview() {
         alert("No changes were made to your review.");
         isEditingMode = false;
         editingDocId = null;
-        renderUserDeviceReviewPanel(cachedReviews);
-        toggleSubmitState(false, false);
+        renderUserDeviceReviewPanel(redeemReviews);
         return;
       }
 
@@ -151,14 +165,14 @@ async function submitUserReview() {
     alert("Failed to submit review. Please try again.");
   } finally {
     toggleSubmitState(false, false);
+    setTimeout(() => {
+      isSubmittingLock = false; // Release lock after execution finishes
+    }, 400);
   }
 }
 
-function generateUniqueAnonymousTag() {
+function generateUniqueAnonymousTag(redeemReviews) {
   const baseName = "Anonymous Traveler";
-  const redeemReviews = cachedReviews.filter(
-    (r) => r.specificUtility === "CODM Redeem Codes Hub",
-  );
   if (redeemReviews.length > 0) {
     const latestReview = redeemReviews[0];
     const latestAuthor = latestReview.author || "";
@@ -220,7 +234,7 @@ function initRealtimeReviewsFeed() {
   );
 }
 
-function renderUserDeviceReviewPanel(reviews) {
+function renderUserDeviceReviewPanel(redeemReviews) {
   let panelContainer = document.getElementById("user-device-review-panel");
   const formCard = document.querySelector(".redeem-form-card");
   if (!formCard) return;
@@ -231,7 +245,7 @@ function renderUserDeviceReviewPanel(reviews) {
     formCard.parentNode.insertBefore(panelContainer, formCard);
   }
 
-  const myReview = reviews.find((r) => r.deviceToken === deviceToken);
+  const myReview = redeemReviews.find((r) => r.deviceToken === deviceToken);
 
   if (myReview) {
     formCard.style.display = "none";
@@ -252,9 +266,10 @@ function renderUserDeviceReviewPanel(reviews) {
     `;
     panelContainer.style.display = "block";
 
-    document
-      .getElementById("trigger-edit-review-btn")
-      .addEventListener("click", () => {
+    const editBtn = document.getElementById("trigger-edit-review-btn");
+    if (editBtn && !editBtn.dataset.bound) {
+      editBtn.dataset.bound = "true";
+      editBtn.addEventListener("click", () => {
         isEditingMode = true;
         editingDocId = myReview.id;
         formCard.style.display = "block";
@@ -273,6 +288,7 @@ function renderUserDeviceReviewPanel(reviews) {
 
         formCard.scrollIntoView({ behavior: "smooth" });
       });
+    }
   } else {
     formCard.style.display = "block";
     panelContainer.innerHTML = "";

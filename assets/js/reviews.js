@@ -1,6 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+import { db } from "./firebase-config.js";
 import {
-  getFirestore,
   collection,
   addDoc,
   updateDoc,
@@ -9,19 +8,6 @@ import {
   query,
   orderBy,
 } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCbCgCRWV4cIDjfGg0llNQXzIscnKvLc9w",
-  authDomain: "vile-tempest-reviews.firebaseapp.com",
-  projectId: "vile-tempest-reviews",
-  storageBucket: "vile-tempest-reviews.firebasestorage.app",
-  messagingSenderId: "1047163835896",
-  appId: "1:1047163835896:web:93edcc036534ee83f6720d",
-  measurementId: "G-DPQHEETQZR",
-};
-
-export const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
 
 let currentFilter = "all";
 let cachedReviews = [];
@@ -36,6 +22,7 @@ if (!deviceToken) {
 
 let isEditingMode = false;
 let editingDocId = null;
+let isSubmittingLock = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   const typeSelect = document.getElementById("review-type");
@@ -52,8 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const submitBtn = document.getElementById("submit-review-btn");
-  if (submitBtn) {
-    submitBtn.addEventListener("click", submitUserReview);
+  if (submitBtn && !submitBtn.dataset.bound) {
+    submitBtn.dataset.bound = "true";
+    submitBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      submitUserReview();
+    });
   }
 
   // Filter Pill Listeners
@@ -71,6 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function submitUserReview() {
+  if (isSubmittingLock) return;
+  isSubmittingLock = true;
+
   const nameInput = document.getElementById("reviewer-name");
   const typeSelect = document.getElementById("review-type");
   const utilitySelect = document.getElementById("utility-name");
@@ -90,12 +84,14 @@ async function submitUserReview() {
     alert(
       "You must agree to the Terms & Privacy Policy before submitting your review.",
     );
+    isSubmittingLock = false;
     return;
   }
 
   // 2. Validate comment content
   if (!comment) {
     alert("Please write a review comment before submitting.");
+    isSubmittingLock = false;
     return;
   }
 
@@ -108,6 +104,7 @@ async function submitUserReview() {
       alert(
         "This device has already submitted a review. You can edit your existing review using the 'Your Review' panel below.",
       );
+      isSubmittingLock = false;
       return;
     }
   }
@@ -127,6 +124,7 @@ async function submitUserReview() {
         `The handle "${enteredName}" is already taken by another reviewer. Please choose a different name.`,
       );
       nameInput.focus();
+      isSubmittingLock = false;
       return;
     }
     finalAuthor = enteredName;
@@ -152,7 +150,6 @@ async function submitUserReview() {
 
       if (hasNoChanges) {
         alert("No changes were made to your review.");
-        // Just close the form / switch back to panel view
         isEditingMode = false;
         editingDocId = null;
         renderUserDeviceReviewPanel(cachedReviews);
@@ -184,6 +181,7 @@ async function submitUserReview() {
         timestamp: new Date(),
         isApproved: true,
       });
+      alert("Your review has been successfully submitted!");
     }
 
     // Reset Form Fields
@@ -202,6 +200,9 @@ async function submitUserReview() {
     alert("Failed to submit review. Please try again.");
   } finally {
     toggleSubmitState(false, false);
+    setTimeout(() => {
+      isSubmittingLock = false;
+    }, 400);
   }
 }
 
@@ -309,9 +310,10 @@ function renderUserDeviceReviewPanel(reviews) {
     panelContainer.style.display = "block";
 
     // Attach edit listener: reveals the form card populated with current data for editing
-    document
-      .getElementById("trigger-edit-review-btn")
-      .addEventListener("click", () => {
+    const editBtn = document.getElementById("trigger-edit-review-btn");
+    if (editBtn && !editBtn.dataset.bound) {
+      editBtn.dataset.bound = "true";
+      editBtn.addEventListener("click", () => {
         isEditingMode = true;
         editingDocId = myReview.id;
 
@@ -349,6 +351,7 @@ function renderUserDeviceReviewPanel(reviews) {
 
         formCard.scrollIntoView({ behavior: "smooth" });
       });
+    }
   } else {
     // Show form card if this device hasn't reviewed yet
     formCard.style.display = "flex";
