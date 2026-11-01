@@ -352,6 +352,11 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+.flowchart-glow {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
 .sketchup-glow {
   background: rgba(245, 158, 11, 0.12);
   color: #f59e0b;
