@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
     tickerBar.className = "quick-ticker-bar";
 
     const titleElements = document.querySelectorAll(
-      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title, .section-main-title, .category-title, .reviews-main-title, .reviews-feed-title",
+      ".utility-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title, .section-main-title, .category-title, .reviews-main-title, .reviews-feed-title",
     );
 
     const extractedTopics = new Set();
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
     filterDropdownMenu.className = "filter-dropdown-menu";
 
     const titleElements = document.querySelectorAll(
-      ".utility-title, .playlist-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title, .section-main-title, .category-title, .reviews-main-title, .reviews-feed-title",
+      ".utility-title, .services-title, .service-header-row h3, .intel-item-title, .contact-title, .section-main-title, .category-title, .reviews-main-title, .reviews-feed-title",
     );
 
     const extractedTopics = new Set();
@@ -342,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const scoredCards = targetCards.map((card) => {
       const text = card.textContent.toLowerCase();
       const titleElem = card.querySelector(
-        ".utility-title, .playlist-title, .hero-title, .services-title, .contact-title, .intel-item-title, .section-main-title, .category-title",
+        ".utility-title, .hero-title, .services-title, .contact-title, .intel-item-title, .section-main-title, .category-title",
       );
       const titleText = titleElem ? titleElem.textContent.toLowerCase() : "";
 
@@ -420,7 +420,6 @@ document.addEventListener("DOMContentLoaded", function () {
       resetPageToOriginalState();
     }
 
-    // Append ID to URL bar without reloading the page
     if (history.pushState) {
       const newUrl =
         window.location.protocol +
@@ -512,7 +511,6 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         applyCurrentViewFilter();
 
-        // Push hash fragment to URL bar (e.g. #reviews, #utilities)
         if (history.pushState) {
           const newUrl =
             window.location.protocol +
@@ -538,7 +536,6 @@ document.addEventListener("DOMContentLoaded", function () {
     executeSearch(sharedQuery);
   }
 
-  // Handle shared URL hash fragments on initial page load (e.g., #reviews, #services, #contact)
   if (window.location.hash) {
     const targetId = window.location.hash.substring(1);
     setTimeout(() => {
@@ -550,6 +547,6 @@ document.addEventListener("DOMContentLoaded", function () {
           elementPosition + window.pageYOffset - headerOffset;
         window.scrollTo({ top: offsetPosition, behavior: "smooth" });
       }
-    }, 300); // 300ms delay ensures DOM elements and dynamic feeds are fully rendered
+    }, 300);
   }
 });

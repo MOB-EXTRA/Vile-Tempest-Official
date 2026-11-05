@@ -23,6 +23,7 @@ if (!deviceToken) {
 let isEditingMode = false;
 let editingDocId = null;
 let isSubmittingLock = false;
+let originalEditSnapshot = null; // Stores initial values when editing starts
 
 document.addEventListener("DOMContentLoaded", () => {
   const typeSelect = document.getElementById("review-type");
@@ -95,23 +96,8 @@ async function submitUserReview() {
     return;
   }
 
-  // 3. Check if device has already reviewed (and we are NOT currently editing)
-  if (!isEditingMode) {
-    const existingDeviceReview = cachedReviews.find(
-      (r) => r.deviceToken === deviceToken,
-    );
-    if (existingDeviceReview) {
-      alert(
-        "This device has already submitted a review. You can edit your existing review using the 'Your Review' panel below.",
-      );
-      isSubmittingLock = false;
-      return;
-    }
-  }
-
   let finalAuthor = "";
   if (enteredName) {
-    // 4. Duplicate Name Check for Custom Nicknames (ignoring own name if editing)
     const nameExists = cachedReviews.some(
       (r) =>
         r.author &&
@@ -136,27 +122,25 @@ async function submitUserReview() {
     toggleSubmitState(true, isEditingMode);
 
     if (isEditingMode && editingDocId) {
-      // Find the current stored review data
-      const myReview = cachedReviews.find((r) => r.id === editingDocId);
-
-      // Check if inputs match existing data exactly
+      // Compare current form values against the original snapshot cached when editing started
       const hasNoChanges =
-        myReview &&
-        myReview.author === finalAuthor &&
-        myReview.reviewType === reviewType &&
-        myReview.specificUtility === specificUtility &&
-        myReview.rating === rating &&
-        myReview.comment === comment;
+        originalEditSnapshot &&
+        originalEditSnapshot.author === enteredName &&
+        originalEditSnapshot.reviewType === reviewType &&
+        originalEditSnapshot.specificUtility === specificUtility &&
+        originalEditSnapshot.rating === rating &&
+        originalEditSnapshot.comment === comment;
 
       if (hasNoChanges) {
-        alert("No changes were made to your review.");
-        isEditingMode = false;
-        editingDocId = null;
-        renderUserDeviceReviewPanel(cachedReviews);
+        alert(
+          "No changes were detected in your review. Please modify the fields before saving.",
+        );
+        isSubmittingLock = false;
+        toggleSubmitState(false, true);
         return;
       }
 
-      // Proceed with updateDoc only if changes exist...
+      // Proceed with updateDoc only if actual modifications occurred
       const reviewRef = doc(db, "site_reviews", editingDocId);
       await updateDoc(reviewRef, {
         author: finalAuthor,
@@ -167,10 +151,26 @@ async function submitUserReview() {
         timestamp: new Date(),
       });
       alert("Your review has been successfully updated!");
-      isEditingMode = false;
-      editingDocId = null;
+
+      // Update local snapshot to match new saved state
+      originalEditSnapshot = {
+        author: enteredName,
+        reviewType: reviewType,
+        specificUtility: specificUtility,
+        rating: rating,
+        comment: comment,
+      };
     } else {
-      // Create new review in Firestore
+      const existingDeviceReview = cachedReviews.find(
+        (r) => r.deviceToken === deviceToken,
+      );
+      if (existingDeviceReview) {
+        alert("This device has already submitted a review.");
+        isSubmittingLock = false;
+        toggleSubmitState(false, false);
+        return;
+      }
+
       await addDoc(collection(db, "site_reviews"), {
         deviceToken: deviceToken,
         author: finalAuthor,
@@ -183,32 +183,17 @@ async function submitUserReview() {
       });
       alert("Your review has been successfully submitted!");
     }
-
-    // Reset Form Fields
-    nameInput.value = "";
-    commentInput.value = "";
-    if (termsCheckbox) termsCheckbox.checked = false;
-    document.getElementById("review-type").value = "General Feedback";
-    document
-      .getElementById("utility-conditional-wrapper")
-      .classList.add("utility-wrapper-hidden");
-
-    const submitBtn = document.getElementById("submit-review-btn");
-    if (submitBtn) submitBtn.textContent = "Submit Review";
   } catch (error) {
     console.error("Error writing document: ", error);
     alert("Failed to submit review. Please try again.");
   } finally {
-    toggleSubmitState(false, false);
+    toggleSubmitState(false, isEditingMode);
     setTimeout(() => {
       isSubmittingLock = false;
     }, 400);
   }
 }
 
-/**
- * Fast unique tag generator for empty anonymous submissions.
- */
 function generateUniqueAnonymousTag() {
   const baseName = "Anonymous Traveler";
   if (cachedReviews && cachedReviews.length > 0) {
@@ -258,7 +243,7 @@ function initRealtimeReviewsFeed() {
       });
 
       updatePlayStoreAnalytics(cachedReviews);
-      renderUserDeviceReviewPanel(cachedReviews);
+      checkAndUpdateFormMode(cachedReviews);
       renderReviewsFeed(cachedReviews);
     },
     (error) => {
@@ -272,97 +257,70 @@ function initRealtimeReviewsFeed() {
 }
 
 /**
- * Renders Play Store style "Your Review" management panel.
- * Hides the review submission form card if the device has already posted a review.
+ * Checks if the user has a published review. If so, automatically sets up the form
+ * into "Edit Review" mode with default values loaded from their review.
  */
-function renderUserDeviceReviewPanel(reviews) {
-  let panelContainer = document.getElementById("user-device-review-panel");
+function checkAndUpdateFormMode(reviews) {
   const formCard = document.querySelector(".review-form-card");
   if (!formCard) return;
 
-  if (!panelContainer) {
-    panelContainer = document.createElement("div");
-    panelContainer.id = "user-device-review-panel";
-    formCard.parentNode.insertBefore(panelContainer, formCard);
-  }
-
+  const headingElem = formCard.querySelector(".review-card-heading");
+  const submitBtn = document.getElementById("submit-review-btn");
   const myReview = reviews.find((r) => r.deviceToken === deviceToken);
 
+  const nameInput = document.getElementById("reviewer-name");
+  const typeSelect = document.getElementById("review-type");
+  const utilityWrapper = document.getElementById("utility-conditional-wrapper");
+  const utilitySelect = document.getElementById("utility-name");
+  const ratingSelect = document.getElementById("review-rating");
+  const commentInput = document.getElementById("review-comment");
+  const termsBox = document.getElementById("review-terms-checkbox");
+
   if (myReview) {
-    // Hide the review input form since the device already reviewed
-    formCard.style.display = "none";
+    // If we just transitioned into editing mode, cache the original baseline
+    if (!isEditingMode || editingDocId !== myReview.id) {
+      isEditingMode = true;
+      editingDocId = myReview.id;
 
-    panelContainer.innerHTML = `
-      <div class="user-review-status-box">
-        <div class="user-review-status-header">
-          <span><i class="fa-solid fa-circle-check"></i> Your Published Review</span>
-          <button type="button" class="btn-edit-my-review" id="trigger-edit-review-btn">
-            <i class="fa-solid fa-pen-to-square"></i> Edit Review
-          </button>
-        </div>
-        <div class="user-review-preview-content">
-          <strong>${escapeHtml(myReview.author)}</strong>
-          <span class="user-review-stars">${"★".repeat(myReview.rating) + "☆".repeat(5 - myReview.rating)}</span>
-          <p>${escapeHtml(myReview.comment)}</p>
-        </div>
-      </div>
-    `;
-    panelContainer.style.display = "block";
+      // Save baseline values to compare against on submit
+      originalEditSnapshot = {
+        author: myReview.author.startsWith("Anonymous Traveler")
+          ? ""
+          : myReview.author,
+        reviewType: myReview.reviewType || "General Feedback",
+        specificUtility: myReview.specificUtility || "CODM PTB Download Links",
+        rating: myReview.rating || 5,
+        comment: myReview.comment || "",
+      };
 
-    // Attach edit listener: reveals the form card populated with current data for editing
-    const editBtn = document.getElementById("trigger-edit-review-btn");
-    if (editBtn && !editBtn.dataset.bound) {
-      editBtn.dataset.bound = "true";
-      editBtn.addEventListener("click", () => {
-        isEditingMode = true;
-        editingDocId = myReview.id;
+      // Populate form fields only on initial entry
+      if (headingElem) headingElem.textContent = "Revise Your Feedback";
+      if (submitBtn) submitBtn.textContent = "Save Changes";
 
-        // Reveal form card
-        formCard.style.display = "flex";
+      if (nameInput) nameInput.value = originalEditSnapshot.author;
+      if (typeSelect) typeSelect.value = originalEditSnapshot.reviewType;
 
-        // Populate form fields with current values
-        document.getElementById("reviewer-name").value =
-          myReview.author.startsWith("Anonymous Traveler")
-            ? ""
-            : myReview.author;
-        document.getElementById("review-type").value =
-          myReview.reviewType || "General Feedback";
+      if (originalEditSnapshot.reviewType === "Utilities") {
+        utilityWrapper.classList.remove("utility-wrapper-hidden");
+        if (utilitySelect)
+          utilitySelect.value = originalEditSnapshot.specificUtility;
+      } else {
+        utilityWrapper.classList.add("utility-wrapper-hidden");
+      }
 
-        const utilityWrapper = document.getElementById(
-          "utility-conditional-wrapper",
-        );
-        if (myReview.reviewType === "Utilities") {
-          utilityWrapper.classList.remove("utility-wrapper-hidden");
-          document.getElementById("utility-name").value =
-            myReview.specificUtility || "CODM PTB Download Links";
-        } else {
-          utilityWrapper.classList.add("utility-wrapper-hidden");
-        }
-
-        document.getElementById("review-rating").value = myReview.rating || 5;
-        document.getElementById("review-comment").value =
-          myReview.comment || "";
-
-        const termsBox = document.getElementById("review-terms-checkbox");
-        if (termsBox) termsBox.checked = true;
-
-        const submitBtn = document.getElementById("submit-review-btn");
-        if (submitBtn) submitBtn.textContent = "Update Review";
-
-        formCard.scrollIntoView({ behavior: "smooth" });
-      });
+      if (ratingSelect) ratingSelect.value = originalEditSnapshot.rating;
+      if (commentInput) commentInput.value = originalEditSnapshot.comment;
+      if (termsBox) termsBox.checked = true;
     }
   } else {
-    // Show form card if this device hasn't reviewed yet
-    formCard.style.display = "flex";
-    panelContainer.innerHTML = "";
-    panelContainer.style.display = "none";
-    isEditingMode = false;
-    editingDocId = null;
+    // Only reset to new review mode if not currently typing
+    if (!isEditingMode) {
+      if (headingElem) headingElem.textContent = "Submit Your Feedback";
+      if (submitBtn) submitBtn.textContent = "Publish Feedback";
+    }
   }
 }
 
-// Compute & Render Play Store Analytics Summary Card
 function updatePlayStoreAnalytics(reviews) {
   const avgScoreElem = document.getElementById("play-store-avg-score");
   const avgStarsElem = document.getElementById("play-store-avg-stars");
@@ -407,7 +365,6 @@ function updatePlayStoreAnalytics(reviews) {
   }
 }
 
-// Render Filtered Feed Cards
 function renderReviewsFeed(reviews) {
   const feedContainer = document.getElementById("reviews-feed-container");
   if (!feedContainer) return;
@@ -431,7 +388,7 @@ function renderReviewsFeed(reviews) {
       : "";
     const isMyDevice = data.deviceToken === deviceToken;
     const badgeHtml = isMyDevice
-      ? ` <span class="your-review-pill">YOUR REVIEW</span>`
+      ? `<span class="your-review-pill">Your Submission</span>`
       : "";
 
     const card = document.createElement("div");

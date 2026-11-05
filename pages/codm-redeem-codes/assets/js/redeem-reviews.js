@@ -24,6 +24,7 @@ if (!deviceToken) {
 let isEditingMode = false;
 let editingDocId = null;
 let isSubmittingLock = false; // Hard execution lock to stop double triggers
+let originalEditSnapshot = null; // Stores original values when edit mode opens
 
 // Initialize once globally per session lifecycle
 if (!window.__redeemHubScriptLoaded) {
@@ -67,11 +68,13 @@ async function submitUserReview() {
       alert(
         "You must agree to the Terms & Privacy Policy before submitting your review.",
       );
+      isSubmittingLock = false;
       return;
     }
 
     if (!comment) {
       alert("Please write a review comment before submitting.");
+      isSubmittingLock = false;
       return;
     }
 
@@ -88,6 +91,7 @@ async function submitUserReview() {
         alert(
           "This device has already submitted a review for the Redeem Codes Hub. You can edit your existing review using the panel below.",
         );
+        isSubmittingLock = false;
         return;
       }
     }
@@ -106,6 +110,7 @@ async function submitUserReview() {
           `The handle "${enteredName}" is already taken by another reviewer. Please choose a different name.`,
         );
         nameInput.focus();
+        isSubmittingLock = false;
         return;
       }
       finalAuthor = enteredName;
@@ -116,18 +121,17 @@ async function submitUserReview() {
     toggleSubmitState(true, isEditingMode);
 
     if (isEditingMode && editingDocId) {
-      const myReview = redeemReviews.find((r) => r.id === editingDocId);
+      // Check if any fields were actually changed compared to the original snapshot
       const hasNoChanges =
-        myReview &&
-        myReview.author === finalAuthor &&
-        myReview.rating === rating &&
-        myReview.comment === comment;
+        originalEditSnapshot &&
+        originalEditSnapshot.author === enteredName &&
+        originalEditSnapshot.rating === rating &&
+        originalEditSnapshot.comment === comment;
 
       if (hasNoChanges) {
-        alert("No changes were made to your review.");
-        isEditingMode = false;
-        editingDocId = null;
-        renderUserDeviceReviewPanel(redeemReviews);
+        alert("No changes were detected in your review.");
+        isSubmittingLock = false;
+        toggleSubmitState(false, true);
         return;
       }
 
@@ -274,13 +278,22 @@ function renderUserDeviceReviewPanel(redeemReviews) {
         editingDocId = myReview.id;
         formCard.style.display = "block";
 
-        document.getElementById("reviewer-name").value =
-          myReview.author.startsWith("Anonymous Traveler")
-            ? ""
-            : myReview.author;
-        document.getElementById("review-rating").value = myReview.rating || 5;
-        document.getElementById("review-comment").value =
-          myReview.comment || "";
+        const authorVal = myReview.author.startsWith("Anonymous Traveler")
+          ? ""
+          : myReview.author;
+        const ratingVal = myReview.rating || 5;
+        const commentVal = myReview.comment || "";
+
+        // Save original snapshot when opening edit mode for change comparison
+        originalEditSnapshot = {
+          author: authorVal,
+          rating: ratingVal,
+          comment: commentVal,
+        };
+
+        document.getElementById("reviewer-name").value = authorVal;
+        document.getElementById("review-rating").value = ratingVal;
+        document.getElementById("review-comment").value = commentVal;
         document.getElementById("review-terms-checkbox").checked = true;
 
         const submitBtn = document.getElementById("submit-review-btn");
@@ -295,6 +308,7 @@ function renderUserDeviceReviewPanel(redeemReviews) {
     panelContainer.style.display = "none";
     isEditingMode = false;
     editingDocId = null;
+    originalEditSnapshot = null;
   }
 }
 
