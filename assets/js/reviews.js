@@ -122,7 +122,6 @@ async function submitUserReview() {
     toggleSubmitState(true, isEditingMode);
 
     if (isEditingMode && editingDocId) {
-      // Compare current form values against the original snapshot cached when editing started
       const hasNoChanges =
         originalEditSnapshot &&
         originalEditSnapshot.author === enteredName &&
@@ -140,7 +139,6 @@ async function submitUserReview() {
         return;
       }
 
-      // Proceed with updateDoc only if actual modifications occurred
       const reviewRef = doc(db, "site_reviews", editingDocId);
       await updateDoc(reviewRef, {
         author: finalAuthor,
@@ -152,7 +150,6 @@ async function submitUserReview() {
       });
       alert("Your review has been successfully updated!");
 
-      // Update local snapshot to match new saved state
       originalEditSnapshot = {
         author: enteredName,
         reviewType: reviewType,
@@ -256,10 +253,6 @@ function initRealtimeReviewsFeed() {
   );
 }
 
-/**
- * Checks if the user has a published review. If so, automatically sets up the form
- * into "Edit Review" mode with default values loaded from their review.
- */
 function checkAndUpdateFormMode(reviews) {
   const formCard = document.querySelector(".review-form-card");
   if (!formCard) return;
@@ -277,12 +270,10 @@ function checkAndUpdateFormMode(reviews) {
   const termsBox = document.getElementById("review-terms-checkbox");
 
   if (myReview) {
-    // If we just transitioned into editing mode, cache the original baseline
     if (!isEditingMode || editingDocId !== myReview.id) {
       isEditingMode = true;
       editingDocId = myReview.id;
 
-      // Save baseline values to compare against on submit
       originalEditSnapshot = {
         author: myReview.author.startsWith("Anonymous Traveler")
           ? ""
@@ -293,7 +284,6 @@ function checkAndUpdateFormMode(reviews) {
         comment: myReview.comment || "",
       };
 
-      // Populate form fields only on initial entry
       if (headingElem) headingElem.textContent = "Revise Your Feedback";
       if (submitBtn) submitBtn.textContent = "Save Changes";
 
@@ -313,7 +303,6 @@ function checkAndUpdateFormMode(reviews) {
       if (termsBox) termsBox.checked = true;
     }
   } else {
-    // Only reset to new review mode if not currently typing
     if (!isEditingMode) {
       if (headingElem) headingElem.textContent = "Submit Your Feedback";
       if (submitBtn) submitBtn.textContent = "Publish Feedback";
@@ -332,9 +321,13 @@ function updatePlayStoreAnalytics(reviews) {
     avgScoreElem.textContent = "0.0";
     avgStarsElem.textContent = "☆☆☆☆☆";
     totalReviewsElem.textContent = "0 reviews";
+    totalReviewsElem.dataset.targetCount = "0";
     for (let i = 1; i <= 5; i++) {
       const bar = document.getElementById(`bar-${i}`);
-      if (bar) bar.style.width = "0%";
+      if (bar) {
+        bar.style.width = "0%";
+        bar.dataset.targetWidth = "0";
+      }
     }
     return;
   }
@@ -351,7 +344,10 @@ function updatePlayStoreAnalytics(reviews) {
 
   const avg = (totalScore / reviews.length).toFixed(1);
   avgScoreElem.textContent = avg;
-  totalReviewsElem.textContent = `${reviews.length} review${reviews.length === 1 ? "" : "s"}`;
+
+  // Set target counts/widths in dataset attributes for animation engine
+  totalReviewsElem.dataset.targetCount = reviews.length;
+  totalReviewsElem.textContent = "0 reviews"; // Reset for counter trigger
 
   const fullStars = Math.round(avg);
   avgStarsElem.textContent = "★".repeat(fullStars) + "☆".repeat(5 - fullStars);
@@ -360,7 +356,8 @@ function updatePlayStoreAnalytics(reviews) {
     const bar = document.getElementById(`bar-${i}`);
     if (bar) {
       const percentage = (starCounts[i] / reviews.length) * 100;
-      bar.style.width = `${percentage}%`;
+      bar.dataset.targetWidth = percentage;
+      bar.style.width = "0%"; // Reset for growing animation trigger
     }
   }
 }

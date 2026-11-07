@@ -32,12 +32,14 @@
    2. WELCOME HERO SECTION STYLES
    ========================================================================== */
 .welcome-hero {
+  position: relative; /* Required to contain the floating icons */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 32px;
   padding: 24px 0 36px;
   width: 100%;
+  overflow: hidden; /* Keeps floating icons contained */
 }
 
 @media (min-width: 850px) {

@@ -1,7 +1,64 @@
 /* ==========================================================================
-   Hero Image Subtle Floating & Gentle Breathing Animation
+   Vile Tempest Official — Modern Pro Animations & Micro-Interactions
    ========================================================================== */
 
+/* ==========================================================================
+   Infinite Retyping Animation & Stable Height Container
+   ========================================================================== */
+.js-typewriter {
+  display: block;
+  margin: 4px 0 0 0;
+  overflow: visible;
+}
+
+.js-typing-text {
+  display: inline-block;
+  /* Forces GPU layer rendering to completely eliminate subpixel jitter/flicker */
+  will-change: contents;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.js-typing-cursor {
+  display: inline-block;
+  font-weight: 700;
+  color: #38bdf8;
+  margin-left: 2px;
+  /* Prevents cursor from wrapping or causing line shifts */
+  white-space: nowrap;
+}
+
+/* Continuous typing, holding, backspacing, and pause keyframe loop */
+@keyframes typingLoop {
+  0% {
+    width: 0;
+  }
+  /* Typing phase (0% to 35%) */
+  35%,
+  65% {
+    width: 24ch; /* Holds text fully typed */
+  }
+  /* Backspacing phase (65% to 90%) */
+  90%,
+  100% {
+    width: 0; /* Holds at 0ch briefly before repeating */
+  }
+}
+
+/* Blinking cursor keyframes */
+@keyframes blink-cursor {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #38bdf8;
+  }
+}
+
+/* ==========================================================================
+   1. HERO IMAGE FLOATING ANIMATION
+   ========================================================================== */
 @keyframes floatAndStretch {
   0% {
     transform: translateY(0px) translateX(0px) scale(1, 1);
@@ -22,12 +79,296 @@
 
 .hero-img {
   will-change: transform;
-  /* Increased duration to 6s for a smoother, more elegant glide */
   animation: floatAndStretch 6s ease-in-out infinite;
 }
 
+/* ==========================================================================
+   2. HERO BUTTONS STAGGERED ENTRANCE ANIMATION (1 by 1 sequence)
+   ========================================================================== */
+.hero-actions > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+  will-change: opacity, transform;
+}
+
+/* Sequential Delays */
+.hero-actions > *:nth-child(1) {
+  transition-delay: 0.15s;
+}
+.hero-actions > *:nth-child(2) {
+  transition-delay: 0.27s;
+}
+.hero-actions > *:nth-child(3) {
+  transition-delay: 0.39s;
+}
+.hero-actions > *:nth-child(4) {
+  transition-delay: 0.51s;
+}
+
+.hero-actions.is-visible > *,
+.hero-actions > *.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-actions > *:hover {
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   3. SCROLL-TRIGGERED ENTRANCE STATES (Hardware Accelerated)
+   ========================================================================== */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px) translateZ(0);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0) translateZ(0);
+}
+
+.animate-fade-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-fade-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.animate-fade-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-fade-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.animate-scale-up {
+  opacity: 0;
+  transform: scale(0.95);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-scale-up.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Stagger Delay Utility Classes */
+.delay-100 {
+  transition-delay: 100ms;
+}
+.delay-200 {
+  transition-delay: 200ms;
+}
+.delay-300 {
+  transition-delay: 300ms;
+}
+.delay-400 {
+  transition-delay: 400ms;
+}
+
+/* ==========================================================================
+   4. CARD & BUTTON MICRO-INTERACTIONS
+   ========================================================================== */
+.service-box,
+.utility-card,
+.intel-item-card,
+.play-store-summary-card,
+.review-form-card,
+.contact-card {
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
+}
+
+.service-box:hover,
+.utility-card:hover,
+.intel-item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(56, 189, 248, 0.12);
+}
+
+.play-store-bar-fill {
+  height: 100%;
+  background: #38bdf8;
+  border-radius: 4px;
+  width: 0%;
+  transition: width 6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary,
+.btn-utility-primary,
+.btn-submit-review,
+.btn-services-highlight {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-utility-primary:hover,
+.btn-submit-review:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35);
+}
+
+/* ==========================================================================
+   5. HERO HOVERING ICONS & MULTI-VARIATION FLIGHT ENGINE STYLES
+   ========================================================================== */
+.services-grid .service-icon-wrapper {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  will-change: opacity;
+}
+
+.hero-image-icons-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.hero-floating-badge {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1.5px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 22px rgba(56, 189, 248, 0.3);
+  backdrop-filter: blur(8px);
+  will-change: transform, opacity, left, top;
+}
+
+@media (min-width: 768px) {
+  .hero-floating-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 1.15rem;
+  }
+}
+
+/* Unique Floating Animation Variants for Non-Boring Motion */
+.hero-floating-badge:nth-child(1) {
+  animation: floatVariantA 5.2s ease-in-out infinite;
+}
+.hero-floating-badge:nth-child(2) {
+  animation: floatVariantB 4.1s ease-in-out infinite;
+  animation-delay: -0.8s;
+}
+.hero-floating-badge:nth-child(3) {
+  animation: floatVariantC 6.5s ease-in-out infinite;
+  animation-delay: -1.5s;
+}
+.hero-floating-badge:nth-child(4) {
+  animation: floatVariantA 4.8s ease-in-out infinite;
+  animation-delay: -2.2s;
+}
+.hero-floating-badge:nth-child(5) {
+  animation: floatVariantB 5.7s ease-in-out infinite;
+  animation-delay: -0.4s;
+}
+.hero-floating-badge:nth-child(6) {
+  animation: floatVariantC 4.5s ease-in-out infinite;
+  animation-delay: -1.9s;
+}
+
+/* Variant A: Gentle diagonal drift with tilt */
+@keyframes floatVariantA {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+  }
+  35% {
+    transform: translateY(-12px) translateX(8px) rotate(6deg) scale(1.06);
+  }
+  70% {
+    transform: translateY(8px) translateX(-6px) rotate(-5deg) scale(0.97);
+  }
+}
+
+/* Variant B: Vertical bob with reverse tilt and pulse */
+@keyframes floatVariantB {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+  }
+  40% {
+    transform: translateY(14px) translateX(-9px) rotate(-7deg) scale(0.95);
+  }
+  80% {
+    transform: translateY(-10px) translateX(7px) rotate(4deg) scale(1.04);
+  }
+}
+
+/* Variant C: Wide floating loop with smoother oscillation */
+@keyframes floatVariantC {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+  }
+  30% {
+    transform: translateY(-15px) translateX(-5px) rotate(-3deg) scale(1.02);
+  }
+  65% {
+    transform: translateY(6px) translateX(12px) rotate(8deg) scale(0.98);
+  }
+}
+
+/* Accessibility: Respect Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .hero-img {
-    animation: none;
+  .hero-img,
+  .animate-on-scroll,
+  .animate-fade-left,
+  .animate-fade-right,
+  .animate-scale-up,
+  .service-box,
+  .utility-card,
+  .play-store-bar-fill,
+  .hero-floating-badge {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .services-grid .service-icon-wrapper {
+    opacity: 1 !important;
   }
 }
