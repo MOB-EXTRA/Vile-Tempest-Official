@@ -340,7 +340,7 @@ function updatePlayStoreAnalytics(reviews) {
     }
   });
 
-  const avg = (totalScore / reviews.length).toFixed(1);
+  const avg = (totalScore / reviews.length).toFixed(2);
   avgScoreElem.textContent = avg;
   totalReviewsElem.textContent = `${reviews.length} review${reviews.length === 1 ? "" : "s"}`;
 

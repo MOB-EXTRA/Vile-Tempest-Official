@@ -342,7 +342,7 @@ function updatePlayStoreAnalytics(reviews) {
     }
   });
 
-  const avg = (totalScore / reviews.length).toFixed(1);
+  const avg = (totalScore / reviews.length).toFixed(2);
   avgScoreElem.textContent = avg;
 
   // Set target counts/widths in dataset attributes for animation engine
